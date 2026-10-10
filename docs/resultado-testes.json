@@ -1,20 +1,20 @@
 {
-  "generatedAt": "2026-10-10T14:14:54.482Z",
+  "generatedAt": "2026-10-10T15:08:34.807Z",
   "source": "dist/index.html",
-  "sourceSha256": "c5b144c0918db4461f3ac6d96db9e28ff5c68996924144ae5a953c8b431667cf",
+  "sourceSha256": "3204e475925588776b08ece182b6396480d8d7e5d47e753bba643b5577814942",
   "environment": "Node VM + simulated DOM; no browser or external integrations",
   "seed": 42,
-  "stressActions": 3000,
-  "total": 29,
-  "passed": 25,
-  "failed": 4,
+  "stressActions": 10000,
+  "total": 41,
+  "passed": 35,
+  "failed": 6,
   "results": [
     {
       "id": "M01",
       "title": "Novo interessado tem entrada unificada de serviços",
       "status": "failed",
       "error": "The expression evaluated to a falsy value:\n\n  assert.ok(a.buttons().includes('Conhecer serviços e planos'))\n",
-      "ms": 7
+      "ms": 6
     },
     {
       "id": "M02",
@@ -62,7 +62,7 @@
       "id": "C03",
       "title": "Preço só após entender o interesse",
       "status": "passed",
-      "ms": 1
+      "ms": 2
     },
     {
       "id": "C04",
@@ -74,25 +74,25 @@
       "id": "C05",
       "title": "Frequência inválida é recusada",
       "status": "passed",
-      "ms": 2
+      "ms": 1
     },
     {
       "id": "C06",
       "title": "Orçamento presencial não inventa preço",
       "status": "passed",
-      "ms": 5
+      "ms": 1
     },
     {
       "id": "C07",
       "title": "Menu permite sair durante escolha da duração",
       "status": "passed",
-      "ms": 1
+      "ms": 2
     },
     {
       "id": "C08",
       "title": "Confirmação negativa permite correção",
       "status": "passed",
-      "ms": 3
+      "ms": 2
     },
     {
       "id": "H01",
@@ -104,7 +104,7 @@
       "id": "H02",
       "title": "Saúde exige confirmação antes do registro",
       "status": "passed",
-      "ms": 16
+      "ms": 14
     },
     {
       "id": "H03",
@@ -182,10 +182,84 @@
       "ms": 1
     },
     {
-      "id": "ST01",
-      "title": "3000 ações aleatórias reprodutíveis, incluindo botões",
+      "id": "C09",
+      "title": "Negação não confirma contratação",
+      "status": "failed",
+      "error": "Expected values to be strictly equal:\n\n1 !== 0\n",
+      "ms": 2
+    },
+    {
+      "id": "C10",
+      "title": "Correção de frequência substitui valor anterior",
       "status": "passed",
-      "ms": 290
+      "ms": 1
+    },
+    {
+      "id": "C11",
+      "title": "Cancelamento da contratação não cria pendência",
+      "status": "passed",
+      "ms": 1
+    },
+    {
+      "id": "C12",
+      "title": "Confirmação repetida não duplica pedido",
+      "status": "passed",
+      "ms": 2
+    },
+    {
+      "id": "C13",
+      "title": "Resposta ambígua não vira beneficiário",
+      "status": "failed",
+      "error": "Expected values to be strictly equal:\n\n'goal' !== 'who'\n",
+      "ms": 1
+    },
+    {
+      "id": "C14",
+      "title": "Cadastro próprio valida email e preserva pagamento pendente",
+      "status": "passed",
+      "ms": 2
+    },
+    {
+      "id": "A05",
+      "title": "Aviso ocorre aos dez minutos e continuar reinicia relógio",
+      "status": "passed",
+      "ms": 1
+    },
+    {
+      "id": "E03",
+      "title": "Arquivo inválido não gera solicitação",
+      "status": "passed",
+      "ms": 1
+    },
+    {
+      "id": "E04",
+      "title": "Vídeo acima de 50 MB é recusado",
+      "status": "passed",
+      "ms": 1
+    },
+    {
+      "id": "E05",
+      "title": "Vídeo no limite exige confirmação e reinício limpa estado",
+      "status": "passed",
+      "ms": 2
+    },
+    {
+      "id": "S02",
+      "title": "Formulário ignora mensagem vazia",
+      "status": "passed",
+      "ms": 1
+    },
+    {
+      "id": "I01",
+      "title": "Cinquenta sessões intercaladas mantêm beneficiários separados",
+      "status": "passed",
+      "ms": 61
+    },
+    {
+      "id": "ST01",
+      "title": "10000 ações aleatórias reprodutíveis, incluindo botões",
+      "status": "passed",
+      "ms": 1585
     }
   ]
 }

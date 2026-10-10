@@ -1,0 +1,144 @@
+{
+  "generatedAt": "2026-10-10T15:08:38.549Z",
+  "environment": "Node VM + DOM simulado, sem serviços externos",
+  "runs": [
+    {
+      "seed": 42,
+      "exitCode": 1,
+      "passed": 35,
+      "failed": 6,
+      "actions": 10000,
+      "sourceSha256": "3204e475925588776b08ece182b6396480d8d7e5d47e753bba643b5577814942",
+      "failures": [
+        {
+          "id": "M01",
+          "title": "Novo interessado tem entrada unificada de serviços",
+          "error": "The expression evaluated to a falsy value:\n\n  assert.ok(a.buttons().includes('Conhecer serviços e planos'))\n"
+        },
+        {
+          "id": "H04",
+          "title": "Comando menu sai da coleta de saúde",
+          "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'health-detail'\n- 'menu'\n"
+        },
+        {
+          "id": "H06",
+          "title": "Dor iniciada agora não recebe pergunta de evolução",
+          "error": "The expression evaluated to a falsy value:\n\n  assert.ok(!a.messages().includes('a dor aumentou'))\n"
+        },
+        {
+          "id": "A04",
+          "title": "Comando textual encerrar funciona no atendimento humano",
+          "error": "Expected values to be strictly equal:\n\n'human' !== 'bot'\n"
+        },
+        {
+          "id": "C09",
+          "title": "Negação não confirma contratação",
+          "error": "Expected values to be strictly equal:\n\n1 !== 0\n"
+        },
+        {
+          "id": "C13",
+          "title": "Resposta ambígua não vira beneficiário",
+          "error": "Expected values to be strictly equal:\n\n'goal' !== 'who'\n"
+        }
+      ],
+      "stress": {
+        "id": "ST01",
+        "title": "10000 ações aleatórias reprodutíveis, incluindo botões",
+        "status": "passed",
+        "ms": 1585
+      }
+    },
+    {
+      "seed": 2026,
+      "exitCode": 1,
+      "passed": 35,
+      "failed": 6,
+      "actions": 10000,
+      "sourceSha256": "3204e475925588776b08ece182b6396480d8d7e5d47e753bba643b5577814942",
+      "failures": [
+        {
+          "id": "M01",
+          "title": "Novo interessado tem entrada unificada de serviços",
+          "error": "The expression evaluated to a falsy value:\n\n  assert.ok(a.buttons().includes('Conhecer serviços e planos'))\n"
+        },
+        {
+          "id": "H04",
+          "title": "Comando menu sai da coleta de saúde",
+          "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'health-detail'\n- 'menu'\n"
+        },
+        {
+          "id": "H06",
+          "title": "Dor iniciada agora não recebe pergunta de evolução",
+          "error": "The expression evaluated to a falsy value:\n\n  assert.ok(!a.messages().includes('a dor aumentou'))\n"
+        },
+        {
+          "id": "A04",
+          "title": "Comando textual encerrar funciona no atendimento humano",
+          "error": "Expected values to be strictly equal:\n\n'human' !== 'bot'\n"
+        },
+        {
+          "id": "C09",
+          "title": "Negação não confirma contratação",
+          "error": "Expected values to be strictly equal:\n\n1 !== 0\n"
+        },
+        {
+          "id": "C13",
+          "title": "Resposta ambígua não vira beneficiário",
+          "error": "Expected values to be strictly equal:\n\n'goal' !== 'who'\n"
+        }
+      ],
+      "stress": {
+        "id": "ST01",
+        "title": "10000 ações aleatórias reprodutíveis, incluindo botões",
+        "status": "passed",
+        "ms": 1726
+      }
+    },
+    {
+      "seed": 8675309,
+      "exitCode": 1,
+      "passed": 35,
+      "failed": 6,
+      "actions": 10000,
+      "sourceSha256": "3204e475925588776b08ece182b6396480d8d7e5d47e753bba643b5577814942",
+      "failures": [
+        {
+          "id": "M01",
+          "title": "Novo interessado tem entrada unificada de serviços",
+          "error": "The expression evaluated to a falsy value:\n\n  assert.ok(a.buttons().includes('Conhecer serviços e planos'))\n"
+        },
+        {
+          "id": "H04",
+          "title": "Comando menu sai da coleta de saúde",
+          "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'health-detail'\n- 'menu'\n"
+        },
+        {
+          "id": "H06",
+          "title": "Dor iniciada agora não recebe pergunta de evolução",
+          "error": "The expression evaluated to a falsy value:\n\n  assert.ok(!a.messages().includes('a dor aumentou'))\n"
+        },
+        {
+          "id": "A04",
+          "title": "Comando textual encerrar funciona no atendimento humano",
+          "error": "Expected values to be strictly equal:\n\n'human' !== 'bot'\n"
+        },
+        {
+          "id": "C09",
+          "title": "Negação não confirma contratação",
+          "error": "Expected values to be strictly equal:\n\n1 !== 0\n"
+        },
+        {
+          "id": "C13",
+          "title": "Resposta ambígua não vira beneficiário",
+          "error": "Expected values to be strictly equal:\n\n'goal' !== 'who'\n"
+        }
+      ],
+      "stress": {
+        "id": "ST01",
+        "title": "10000 ações aleatórias reprodutíveis, incluindo botões",
+        "status": "passed",
+        "ms": 1551
+      }
+    }
+  ]
+}
