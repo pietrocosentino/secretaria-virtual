@@ -59,3 +59,6 @@ Integração com MFIT adiada. Aplicativo próprio previsto futuramente.
 ## Limites da demonstração
 Estado apenas em memória; sem armazenamento de saúde, integrações, cobrança real ou IA.
 Agenda e operações não implementadas são encaminhadas ao personal.
+
+## Atualização de saúde — versão 02
+Menu e palavras-chave para lesões, dores, cirurgias, medicamentos, hormônios, substâncias, condições e restrições. Perguntas curtas, sem perguntar sobre acompanhamento médico. Resumo deve ser confirmado antes de registro e encaminhamento. Personal recebe pendência com data, origem e relato; bot não prescreve nem altera medicamentos ou treino. Históricos apenas na sessão de demonstração. Integração com anamnese para evitar repetição ainda pendente. Testes: lesão, substância, diabetes, cirurgia, confirmação e pausa humana.
