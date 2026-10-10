@@ -1,20 +1,19 @@
 {
-  "generatedAt": "2026-10-10T15:08:34.807Z",
+  "generatedAt": "2026-10-10T15:15:06.335Z",
   "source": "dist/index.html",
-  "sourceSha256": "3204e475925588776b08ece182b6396480d8d7e5d47e753bba643b5577814942",
+  "sourceSha256": "5f9fc346c1db6915e633bd0fd48e6d5bc211dfd6ee5147de4fc9f5499ccc6438",
   "environment": "Node VM + simulated DOM; no browser or external integrations",
   "seed": 42,
   "stressActions": 10000,
-  "total": 41,
-  "passed": 35,
-  "failed": 6,
+  "total": 45,
+  "passed": 45,
+  "failed": 0,
   "results": [
     {
       "id": "M01",
       "title": "Novo interessado tem entrada unificada de serviços",
-      "status": "failed",
-      "error": "The expression evaluated to a falsy value:\n\n  assert.ok(a.buttons().includes('Conhecer serviços e planos'))\n",
-      "ms": 6
+      "status": "passed",
+      "ms": 3
     },
     {
       "id": "M02",
@@ -38,7 +37,7 @@
       "id": "P03",
       "title": "Regularização simulada libera acesso",
       "status": "passed",
-      "ms": 1
+      "ms": 2
     },
     {
       "id": "P04",
@@ -62,25 +61,25 @@
       "id": "C03",
       "title": "Preço só após entender o interesse",
       "status": "passed",
-      "ms": 2
+      "ms": 6
     },
     {
       "id": "C04",
       "title": "Nova contratação preserva plano atual",
       "status": "passed",
-      "ms": 2
+      "ms": 3
     },
     {
       "id": "C05",
       "title": "Frequência inválida é recusada",
       "status": "passed",
-      "ms": 1
+      "ms": 2
     },
     {
       "id": "C06",
       "title": "Orçamento presencial não inventa preço",
       "status": "passed",
-      "ms": 1
+      "ms": 2
     },
     {
       "id": "C07",
@@ -92,19 +91,19 @@
       "id": "C08",
       "title": "Confirmação negativa permite correção",
       "status": "passed",
-      "ms": 2
+      "ms": 1
     },
     {
       "id": "H01",
       "title": "Resposta local não encerra coleta",
       "status": "passed",
-      "ms": 2
+      "ms": 3
     },
     {
       "id": "H02",
       "title": "Saúde exige confirmação antes do registro",
       "status": "passed",
-      "ms": 14
+      "ms": 18
     },
     {
       "id": "H03",
@@ -115,9 +114,8 @@
     {
       "id": "H04",
       "title": "Comando menu sai da coleta de saúde",
-      "status": "failed",
-      "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'health-detail'\n- 'menu'\n",
-      "ms": 2
+      "status": "passed",
+      "ms": 1
     },
     {
       "id": "H05",
@@ -128,9 +126,8 @@
     {
       "id": "H06",
       "title": "Dor iniciada agora não recebe pergunta de evolução",
-      "status": "failed",
-      "error": "The expression evaluated to a falsy value:\n\n  assert.ok(!a.messages().includes('a dor aumentou'))\n",
-      "ms": 2
+      "status": "passed",
+      "ms": 1
     },
     {
       "id": "E01",
@@ -148,7 +145,7 @@
       "id": "A01",
       "title": "Personal assume e bot fica pausado",
       "status": "passed",
-      "ms": 1
+      "ms": 2
     },
     {
       "id": "A02",
@@ -165,8 +162,7 @@
     {
       "id": "A04",
       "title": "Comando textual encerrar funciona no atendimento humano",
-      "status": "failed",
-      "error": "Expected values to be strictly equal:\n\n'human' !== 'bot'\n",
+      "status": "passed",
       "ms": 1
     },
     {
@@ -184,9 +180,8 @@
     {
       "id": "C09",
       "title": "Negação não confirma contratação",
-      "status": "failed",
-      "error": "Expected values to be strictly equal:\n\n1 !== 0\n",
-      "ms": 2
+      "status": "passed",
+      "ms": 1
     },
     {
       "id": "C10",
@@ -204,20 +199,19 @@
       "id": "C12",
       "title": "Confirmação repetida não duplica pedido",
       "status": "passed",
-      "ms": 2
+      "ms": 1
     },
     {
       "id": "C13",
       "title": "Resposta ambígua não vira beneficiário",
-      "status": "failed",
-      "error": "Expected values to be strictly equal:\n\n'goal' !== 'who'\n",
+      "status": "passed",
       "ms": 1
     },
     {
       "id": "C14",
       "title": "Cadastro próprio valida email e preserva pagamento pendente",
       "status": "passed",
-      "ms": 2
+      "ms": 4
     },
     {
       "id": "A05",
@@ -241,7 +235,7 @@
       "id": "E05",
       "title": "Vídeo no limite exige confirmação e reinício limpa estado",
       "status": "passed",
-      "ms": 2
+      "ms": 1
     },
     {
       "id": "S02",
@@ -253,13 +247,37 @@
       "id": "I01",
       "title": "Cinquenta sessões intercaladas mantêm beneficiários separados",
       "status": "passed",
-      "ms": 61
+      "ms": 73
+    },
+    {
+      "id": "C15",
+      "title": "Frases com sim ambíguo não registram pedido",
+      "status": "passed",
+      "ms": 6
+    },
+    {
+      "id": "H07",
+      "title": "Resumo omite evolução quando dor começou agora",
+      "status": "passed",
+      "ms": 2
+    },
+    {
+      "id": "H08",
+      "title": "Cancelar resumo descarta rascunho sem registro",
+      "status": "passed",
+      "ms": 1
+    },
+    {
+      "id": "A06",
+      "title": "Menção a encerrar em frase não encerra sessão humana",
+      "status": "passed",
+      "ms": 1
     },
     {
       "id": "ST01",
       "title": "10000 ações aleatórias reprodutíveis, incluindo botões",
       "status": "passed",
-      "ms": 1585
+      "ms": 1735
     }
   ]
 }
