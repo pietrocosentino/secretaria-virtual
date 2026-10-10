@@ -2,7 +2,7 @@
 
 Plataforma em desenvolvimento para automatizar o atendimento de profissionais autônomos e microempreendedores. A proposta é reduzir o tempo de resposta, organizar solicitações e permitir que o profissional se concentre nos seus clientes.
 
-O piloto é uma secretária virtual para o Time Rafa Castro, com atendimento a alunos e interessados em consultoria online e serviços presenciais.
+O piloto é uma secretária virtual para o profissional de demonstração, com atendimento a alunos e interessados em consultoria online e serviços presenciais.
 
 ## Protótipo atual
 
@@ -39,7 +39,7 @@ Atendimento com IA e WhatsApp, cadastro persistente, agendamento integrado ao ca
 
 ## Demonstração publicada
 
-https://rafa-assistente-demo.goldenstork8.chatgpt.site
+https://secretaria-virtual-demo.goldenstork8.chatgpt.site
 
 O acesso à demonstração é privado e depende da autorização do proprietário.
 
