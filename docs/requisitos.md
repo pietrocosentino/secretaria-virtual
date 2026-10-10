@@ -1,4 +1,4 @@
-# Requisitos do piloto — Time Rafa Castro
+# Requisitos do piloto — profissional de demonstração
 
 ## Objetivo
 Reduzir a demora no atendimento pelo WhatsApp, organizar interessados e alunos e automatizar atividades administrativas.
