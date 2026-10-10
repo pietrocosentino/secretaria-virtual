@@ -62,3 +62,7 @@ Agenda e operações não implementadas são encaminhadas ao personal.
 
 ## Atualização de saúde — versão 02
 Menu e palavras-chave para lesões, dores, cirurgias, medicamentos, hormônios, substâncias, condições e restrições. Perguntas curtas, sem perguntar sobre acompanhamento médico. Resumo deve ser confirmado antes de registro e encaminhamento. Personal recebe pendência com data, origem e relato; bot não prescreve nem altera medicamentos ou treino. Históricos apenas na sessão de demonstração. Integração com anamnese para evitar repetição ainda pendente. Testes: lesão, substância, diabetes, cirurgia, confirmação e pausa humana.
+
+## Coleta por etapas e vídeos — versão 03
+Lesão/dor: local e lado, início, contexto (treino/casa/trabalho/outro), intensidade relatada 0–10, impacto, evolução e orientações existentes. Uma pergunta por vez; respostas desconhecidas e encaminhamento antecipado permitidos. Resumo confirmado antes de registrar.
+Dificuldade em exercício: identificar exercício, dificuldade e dor. Dor segue atualização de saúde sem solicitar repetição dolorosa. Referências precisam de aprovação e ainda não estão cadastradas. Vídeo selecionado e reproduzido apenas no navegador, limite demonstrativo 50 MB; gera pendência para análise humana, sem upload real nem análise automática. Links locais deixam de existir ao reiniciar ou atualizar. IA contextual e extração de informações de relatos completos ainda pendentes.
