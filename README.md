@@ -46,3 +46,21 @@ O acesso à demonstração é privado e depende da autorização do proprietári
 ## Condições comerciais
 
 Os preços são referências do material fornecido pelo personal. Condições finais e juros devem ser validados antes da operação comercial. Dados de alunos no protótipo são fictícios.
+
+## Backend piloto para WhatsApp
+
+A pasta `src` implementa webhook assinado da Meta Cloud API, envio de texto, coleta de interesse de contratação, pausa para atendimento humano, lista de destinatários de teste e persistência local em uma instância Node. Ainda não foi conectado a uma conta Meta nem publicado em URL HTTPS.
+
+- [Configuração e homologação pelo celular](docs/whatsapp-setup.md)
+- [Arquitetura, princípios SOLID e limites](docs/arquitetura.md)
+
+O backend novo está separado em domínio, aplicação, infraestrutura e HTTP, com dependências injetadas. O HTML de demonstração mantém seu motor próprio e não está conectado ao backend; a integração nesta etapa não tem todas as jornadas do protótipo.
+
+```bash
+npm test
+npm run test:prototype
+npm run test:stress
+```
+
+22 testes do backend, 45 casos do protótipo e estresse HTTP localhost em 1, 5, 10, 25 e 50 conversas simultâneas. O transporte Meta é falso nos testes automáticos. O teste opcional `npm run test:whatsapp` envia uma mensagem real depois da configuração de `.env.local`; aceite pela API não comprova entrega.
+

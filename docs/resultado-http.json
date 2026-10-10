@@ -1,0 +1,41 @@
+{
+  "generatedAt": "2026-10-10T15:26:03.584Z",
+  "scope": "HTTP localhost + MemoryStore + fake Meta transport, sem tráfego externo",
+  "reports": [
+    {
+      "concurrency": 1,
+      "requests": 10,
+      "messagesSent": 5,
+      "p95Ms": 26.45,
+      "status": "passed"
+    },
+    {
+      "concurrency": 5,
+      "requests": 50,
+      "messagesSent": 25,
+      "p95Ms": 15.32,
+      "status": "passed"
+    },
+    {
+      "concurrency": 10,
+      "requests": 100,
+      "messagesSent": 50,
+      "p95Ms": 16.4,
+      "status": "passed"
+    },
+    {
+      "concurrency": 25,
+      "requests": 250,
+      "messagesSent": 125,
+      "p95Ms": 78.18,
+      "status": "passed"
+    },
+    {
+      "concurrency": 50,
+      "requests": 500,
+      "messagesSent": 250,
+      "p95Ms": 250.93,
+      "status": "passed"
+    }
+  ]
+}
