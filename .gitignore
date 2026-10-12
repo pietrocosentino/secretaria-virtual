@@ -1,7 +1,6 @@
-.env
-.env.*
+.env*
 !.env.example
 node_modules/
-.DS_Store
-.openai/
-*.tar.gz
+reports/
+data/
+*.log

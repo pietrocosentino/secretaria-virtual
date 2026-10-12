@@ -1,0 +1,51 @@
+{
+  "generatedAt": "2026-10-10T15:15:10.014Z",
+  "environment": "Node VM + DOM simulado, sem serviços externos",
+  "runs": [
+    {
+      "seed": 42,
+      "exitCode": 0,
+      "passed": 45,
+      "failed": 0,
+      "actions": 10000,
+      "sourceSha256": "5f9fc346c1db6915e633bd0fd48e6d5bc211dfd6ee5147de4fc9f5499ccc6438",
+      "failures": [],
+      "stress": {
+        "id": "ST01",
+        "title": "10000 ações aleatórias reprodutíveis, incluindo botões",
+        "status": "passed",
+        "ms": 1735
+      }
+    },
+    {
+      "seed": 2026,
+      "exitCode": 0,
+      "passed": 45,
+      "failed": 0,
+      "actions": 10000,
+      "sourceSha256": "5f9fc346c1db6915e633bd0fd48e6d5bc211dfd6ee5147de4fc9f5499ccc6438",
+      "failures": [],
+      "stress": {
+        "id": "ST01",
+        "title": "10000 ações aleatórias reprodutíveis, incluindo botões",
+        "status": "passed",
+        "ms": 1679
+      }
+    },
+    {
+      "seed": 8675309,
+      "exitCode": 0,
+      "passed": 45,
+      "failed": 0,
+      "actions": 10000,
+      "sourceSha256": "5f9fc346c1db6915e633bd0fd48e6d5bc211dfd6ee5147de4fc9f5499ccc6438",
+      "failures": [],
+      "stress": {
+        "id": "ST01",
+        "title": "10000 ações aleatórias reprodutíveis, incluindo botões",
+        "status": "passed",
+        "ms": 1522
+      }
+    }
+  ]
+}

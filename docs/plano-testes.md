@@ -6,10 +6,18 @@ Validar jornadas, regras de acesso, contexto e falhas de navegação antes de in
 Requisito: Node.js 18 ou superior, sem dependências externas. Na raiz do repositório:
 
 ```bash
-node tests/prototype.test.cjs --stress=3000 --report=docs/resultado-testes.json
+node tests/prototype.test.cjs --stress=10000 --seed=42 --report=docs/resultado-testes.json
 ```
 
-Retorno 0 indica sucesso total; 1 indica ao menos uma falha. O relatório contém resultados individuais, hash SHA-256 da versão testada e ambiente. A sequência aleatória usa semente 42 para reprodução. Para maior volume, use `--stress=10000`.
+Retorno 0 indica sucesso total; 1 indica ao menos uma falha. O relatório contém resultados individuais, hash SHA-256 da versão testada e ambiente. A sequência aleatória aceita `--seed=N` para reprodução. Para maior volume, use `--stress=100000`.
+
+Para executar três sequências independentes (42, 2026 e 8675309):
+
+```bash
+node tests/stress-matrix.cjs --actions=10000 --out=reports
+```
+
+O script grava um JSON por semente e `resumo.json`, e retorna 1 quando há falhas. Não exige instalação de pacotes.
 
 ## Cobertura automatizada
 | Grupo | Cobertura |
@@ -23,15 +31,17 @@ Retorno 0 indica sucesso total; 1 indica ao menos uma falha. O relatório conté
 | Entradas adversas | Conteúdo HTML como texto; mensagens vazias, emojis, mensagens longas e sequências inesperadas |
 | Estresse de lógica | Milhares de ações distribuídas por cenários; mensagens e cliques, sem exceções |
 
-## Falhas identificadas na primeira execução
+## Regressões corrigidas nesta versão
 | ID | Comportamento esperado | Resultado observado |
 |---|---|---|
 | M01 | Novo interessado vê Conhecer serviços e planos | Menu ainda separa consultoria e atendimento presencial |
 | H04 | Menu interrompe coleta de saúde | Palavra é registrada como resposta de saúde |
 | H06 | Início agora evita pergunta redundante de evolução | Pergunta continua sendo feita |
 | A04 | Encerrar por texto finaliza sessão humana | Bot ignora comando enquanto está pausado |
+| C09 | Negação em confirmação impede registrar pedido | “sim, mas não quero contratar ainda” registra solicitação |
+| C13 | Resposta ambígua exige esclarecimento | “sim” é registrado como beneficiário |
 
-Esses casos são testes de regressão intencionalmente falhando, não devem ser removidos ou afrouxados para aprovar a versão.
+Esses seis casos agora passam. Permanecem como testes de regressão para impedir a reintrodução das falhas.
 
 ## Homologação manual no navegador
 Use dados e vídeos fictícios. Não usar registros reais de saúde.
@@ -50,8 +60,19 @@ Use dados e vídeos fictícios. Não usar registros reais de saúde.
 | B10 Uso real do tempo | Comparar avanço simulado e ausência de interação | Registrar que relógio é simulado, não temporizador real |
 
 ## Limites e critérios de liberação
-A suíte usa DOM simulado em Node, não navegador real. Não avalia CSS, acessibilidade completa, codecs, capacidade de rede, usuários simultâneos, IA, privacidade em produção, segurança de backend ou pagamentos reais. As 3.000 ações validam robustez lógica; não representam teste de carga de um serviço.
+A suíte usa DOM simulado em Node, não navegador real. Não avalia CSS, acessibilidade completa, codecs, capacidade de rede, usuários simultâneos, IA, privacidade em produção, segurança de backend ou pagamentos reais. As ações validam robustez lógica; não representam teste de carga de um serviço.
 
 Bloqueadores: acesso indevido por inadimplência, perda de plano existente, registro sem confirmação, bot respondendo durante atendimento humano ou falhas nas jornadas principais. Antes de produção, resolver regressões e executar testes de navegador e integrações.
 
-Próxima etapa: corrigir os quatro casos, executar novamente e só depois ampliar os testes para o agente e serviços externos.
+Próxima etapa: homologar a interface no navegador e ampliar os testes quando houver agente e serviços externos.
+
+
+## Resultado verificado
+
+45 casos por execução: 45 aprovados e nenhuma falha nas três sementes, totalizando 30.000 ações aleatórias. O estresse inclui invariantes: identificadores de pendências únicos, proprietário da conversa válido, bloqueio financeiro e preservação do nome do aluno com plano existente. O caso I01 intercala 50 contextos de VM independentes e verifica isolamento de beneficiários; não representa concorrência de servidor.
+
+Casos adicionais incluem email inválido, confirmação repetida, correção de frequência, cancelamento, aviso aos dez minutos, formulário vazio e seleção de vídeos falsos de tipos/tamanhos diferentes. Os objetos de arquivo são simulados: reprodução, upload e liberação real de memória devem ser conferidos no navegador.
+
+Não há agendamento real nesta versão: verificar que pedidos de marcar, cancelar e remarcar apenas geram encaminhamento e nunca prometem alteração de calendário. Testes de carga HTTP/WhatsApp ficam para a implementação dessas integrações.
+
+A aplicação foi corrigida: entrada unificada, comandos de saída na coleta de saúde, evolução omitida quando a dor começou agora, encerramento textual exato durante atendimento humano, confirmação explícita e esclarecimento para beneficiário ambíguo. Os relatórios correspondem ao hash desta versão corrigida.
