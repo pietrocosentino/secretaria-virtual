@@ -53,3 +53,9 @@ test('Edge: caminhos internos do gateway são normalizados', async () => {
   const response = await handleRequest(new Request('https://example.test/whatsapp?hub.mode=subscribe&hub.verify_token=verify&hub.challenge=55'), env);
   assert.equal(response.status, 200); assert.equal(await response.text(), '55');
 });
+
+test('Edge: diagnóstico indica nome ausente sem expor valores', async () => {
+  const response = await handleRequest(new Request(base), {...env, META_APP_SECRET: ''});
+  const body = await response.text(); assert.match(body, /missing META_APP_SECRET/);
+  assert.ok(!body.includes('fixture-key')); assert.ok(!body.includes('verify'));
+});

@@ -11,9 +11,10 @@ export async function handleRequest(request, env, dependencies = {}) {
   const route = url.pathname.startsWith(prefix) ? url.pathname.slice(prefix.length) || '/' : url.pathname;
   if (route === '/health' && request.method === 'GET') return reply(200, 'ok');
   const required = ['META_VERIFY_TOKEN', 'META_APP_SECRET', 'META_ACCESS_TOKEN', 'META_PHONE_NUMBER_ID', 'META_GRAPH_VERSION', 'WHATSAPP_ALLOWED_NUMBERS', 'ADMIN_TOKEN', 'SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY'];
-  if (required.some(key => !env[key]?.trim())) return reply(503, 'Configuration pending');
+  const missing = required.filter(key => !env[key]?.trim());
+  if (missing.length) return reply(503, 'Configuration pending: missing ' + missing.join(', '));
   const allowedNumbers = env.WHATSAPP_ALLOWED_NUMBERS.split(',').map(number => number.trim());
-  if (allowedNumbers.some(number => !/^\d{7,15}$/.test(number))) return reply(503, 'Configuration pending');
+  if (allowedNumbers.some(number => !/^\d{7,15}$/.test(number))) return reply(503, 'Configuration pending: invalid WHATSAPP_ALLOWED_NUMBERS');
   let raw = Buffer.alloc(0);
   if (request.body) {
     const reader = request.body.getReader(); const chunks = []; let length = 0;
