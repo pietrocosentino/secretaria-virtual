@@ -1,4 +1,5 @@
 import { Buffer } from 'node:buffer';
+import { timingSafeEqual } from 'node:crypto';
 import { Readable } from 'node:stream';
 import { createHandler } from './shared/handler.mjs';
 import { MessageService } from './shared/handle-message.mjs';
@@ -10,6 +11,18 @@ export async function handleRequest(request, env, dependencies = {}) {
   const prefix = url.pathname.startsWith('/functions/v1/whatsapp') ? '/functions/v1/whatsapp' : '/whatsapp';
   const route = url.pathname.startsWith(prefix) ? url.pathname.slice(prefix.length) || '/' : url.pathname;
   if (route === '/health' && request.method === 'GET') return reply(200, 'ok');
+  if ((route === '/' || route === '/webhooks/whatsapp') && request.method === 'GET') {
+    const actual = Buffer.from(url.searchParams.get('hub.verify_token') || '');
+    const expected = Buffer.from(env.META_VERIFY_TOKEN || '');
+    const tokenMatches = expected.length > 0 && actual.length === expected.length && timingSafeEqual(actual, expected);
+    const modeValid = url.searchParams.get('hub.mode') === 'subscribe';
+    const challengePresent = url.searchParams.has('hub.challenge');
+    // Apenas resultados booleanos; nunca registrar URL/query ou valores secretos.
+    console.info(JSON.stringify({event:'webhook_verification', modeValid, challengePresent, tokenMatches, tokenConfigured:expected.length > 0}));
+    return reply(tokenMatches && modeValid && challengePresent ? 200 : 403,
+      tokenMatches && modeValid && challengePresent ? url.searchParams.get('hub.challenge') : 'Verification rejected');
+  }
+
   const required = ['META_VERIFY_TOKEN', 'META_APP_SECRET', 'META_ACCESS_TOKEN', 'META_PHONE_NUMBER_ID', 'META_GRAPH_VERSION', 'WHATSAPP_ALLOWED_NUMBERS', 'ADMIN_TOKEN', 'SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY'];
   const missing = required.filter(key => !env[key]?.trim());
   if (missing.length) return reply(503, 'Configuration pending: missing ' + missing.join(', '));

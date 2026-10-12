@@ -11,7 +11,7 @@ test('Edge: challenge da Meta passa sem JWT', async () => {
   assert.equal(response.status, 200); assert.equal(await response.text(), '987');
 });
 test('Edge: configuração incompleta falha fechada', async () => {
-  assert.equal((await handleRequest(new Request(base), {})).status, 503);
+  assert.equal((await handleRequest(new Request(base, {method:'POST', body:'{}'}), {})).status, 503);
 });
 test('Edge: POST sem assinatura é recusado antes de acessar banco', async () => {
   assert.equal((await handleRequest(new Request(base, { method: 'POST', body: '{}' }), env)).status, 401);
@@ -55,7 +55,14 @@ test('Edge: caminhos internos do gateway são normalizados', async () => {
 });
 
 test('Edge: diagnóstico indica nome ausente sem expor valores', async () => {
-  const response = await handleRequest(new Request(base), {...env, META_APP_SECRET: ''});
+  const response = await handleRequest(new Request(base, {method:'POST', body:'{}'}), {...env, META_APP_SECRET: ''});
   const body = await response.text(); assert.match(body, /missing META_APP_SECRET/);
   assert.ok(!body.includes('fixture-key')); assert.ok(!body.includes('verify'));
+});
+
+test('Edge: verificação depende apenas de META_VERIFY_TOKEN, sem transporte/banco', async () => {
+  const response = await handleRequest(new Request(base + '?hub.mode=subscribe&hub.verify_token=verify&hub.challenge=123'), {META_VERIFY_TOKEN:'verify'});
+  assert.equal(response.status, 200); assert.equal(await response.text(), '123');
+  const invalid = await handleRequest(new Request(base + '?hub.mode=subscribe&hub.verify_token=wrong&hub.challenge=123'), {META_VERIFY_TOKEN:'verify'});
+  assert.equal(invalid.status, 403);
 });
