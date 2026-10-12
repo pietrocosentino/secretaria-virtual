@@ -47,3 +47,9 @@ test('Store: lease expirada não sobrescreve estado', async () => {
   const store = new SupabaseStore({url: env.SUPABASE_URL, key: 'test', fetchImpl: async url => ({ok:true,json:async()=>url.endsWith('secretaria_acquire') ? {contacts:{}} : false})});
   await assert.rejects(store.transaction(async data => store.persist(data)), /expired/);
 });
+
+test('Edge: caminhos internos do gateway são normalizados', async () => {
+  assert.equal((await handleRequest(new Request('https://example.test/whatsapp/health'), {})).status, 200);
+  const response = await handleRequest(new Request('https://example.test/whatsapp?hub.mode=subscribe&hub.verify_token=verify&hub.challenge=55'), env);
+  assert.equal(response.status, 200); assert.equal(await response.text(), '55');
+});

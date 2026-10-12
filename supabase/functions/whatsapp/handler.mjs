@@ -7,7 +7,7 @@ import { SupabaseStore } from './shared/store.mjs';
 export async function handleRequest(request, env, dependencies = {}) {
   const reply = (status, body) => new Response(body, { status, headers: { 'Cache-Control': 'no-store' } });
   const url = new URL(request.url);
-  const prefix = '/functions/v1/whatsapp';
+  const prefix = url.pathname.startsWith('/functions/v1/whatsapp') ? '/functions/v1/whatsapp' : '/whatsapp';
   const route = url.pathname.startsWith(prefix) ? url.pathname.slice(prefix.length) || '/' : url.pathname;
   if (route === '/health' && request.method === 'GET') return reply(200, 'ok');
   const required = ['META_VERIFY_TOKEN', 'META_APP_SECRET', 'META_ACCESS_TOKEN', 'META_PHONE_NUMBER_ID', 'META_GRAPH_VERSION', 'WHATSAPP_ALLOWED_NUMBERS', 'ADMIN_TOKEN', 'SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY'];

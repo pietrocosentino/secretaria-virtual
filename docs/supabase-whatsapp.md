@@ -25,3 +25,11 @@ Usar projeto dedicado `Secretária Virtual` na organização `SmartTec`. Nenhuma
 Este armazenamento mantém o modelo serial do piloto: uma lease global no banco, renovada a cada persistência. Chamadas concorrentes recebem 503 para reentrega da Meta. Não comprova capacidade de produção; deve evoluir para fila e transações por contato antes de escala. Interrupção após envio e antes de persistência pode repetir resposta; não há garantia de exatamente uma vez. A fila de mensagens de um mesmo contato também depende da ordem de entrega do provedor.
 
 Os testes Node usam banco simulado. A execução SQL, o runtime Deno hospedado, os segredos, a função pública e a conversa real ainda precisam ser validados após criação do projeto. O health check prova apenas disponibilidade HTTP.
+
+## Implantação de homologação — 12/10/2026
+
+Projeto SmartTec `Secretaria Virtual`, ref `kpxourwsbawmwemzwozn`, região `us-west-2`. Esquema aplicado por migration `secretaria_pilot_state`. Verificados no Postgres real: aquisição exclusiva, rejeição de lease concorrente/token inválido, gravação e liberação, com rollback dos testes. RLS habilitado sem políticas públicas é intencional: somente service_role acessa a tabela.
+
+Função `whatsapp` publicada; `/functions/v1/whatsapp/health` retornou `200 ok`. Corrigida normalização do caminho interno do gateway e acrescentado teste de regressão (9 testes Edge passam em Node).
+
+Callback: `https://kpxourwsbawmwemzwozn.supabase.co/functions/v1/whatsapp`. Segredos Meta e ADMIN_TOKEN ainda precisam ser configurados; a raiz permanece `503 Configuration pending` até configuração completa. Webhook Meta ainda não conectado; health não comprova envio real.
