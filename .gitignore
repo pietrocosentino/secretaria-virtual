@@ -5,3 +5,14 @@ node_modules/
 .DS_Store
 .openai/
 *.tar.gz
+
+PORT=3000
+
+# Webhook da Meta (WhatsApp Cloud API)
+WHATSAPP_VERIFY_TOKEN=
+WHATSAPP_ACCESS_TOKEN=
+WHATSAPP_PHONE_NUMBER_ID=
+WHATSAPP_APP_SECRET=
+
+# IA
+OPENAI_API_KEY=
