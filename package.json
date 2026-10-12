@@ -11,8 +11,10 @@
     "test": "node --test tests/backend/*.test.cjs",
     "test:prototype": "node tests/prototype.test.cjs --stress=10000",
     "test:stress": "node scripts/stress-http.cjs",
-    "test:all": "npm test && npm run test:prototype && npm run test:stress",
+    "test:all": "npm test && npm run test:edge && npm run test:prototype && npm run test:stress",
     "test:whatsapp": "node --env-file=.env.local scripts/whatsapp-smoke.cjs",
-    "start:hosted": "node src/server.cjs"
+    "start:hosted": "node src/server.cjs",
+    "build:edge": "node scripts/build-edge.cjs",
+    "test:edge": "npm run build:edge && node --test tests/backend/edge.test.mjs"
   }
 }

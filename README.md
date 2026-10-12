@@ -64,3 +64,7 @@ npm run test:stress
 
 22 testes do backend, 45 casos do protótipo e estresse HTTP localhost em 1, 5, 10, 25 e 50 conversas simultâneas. O transporte Meta é falso nos testes automáticos. O teste opcional `npm run test:whatsapp` envia uma mensagem real depois da configuração de `.env.local`; aceite pela API não comprova entrega.
 
+
+## Supabase — SmartTec
+
+A adaptação para Edge Functions e persistência Postgres está em `supabase/`. A geração ESM reutiliza as regras do backend Node. Consulte [implantação Supabase](docs/supabase-whatsapp.md). Projeto, banco e função ainda não foram criados ou publicados; testes de Edge executam em Node com banco simulado.

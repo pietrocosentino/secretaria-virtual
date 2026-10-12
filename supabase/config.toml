@@ -1,0 +1,5 @@
+[functions.whatsapp]
+# Meta não envia JWT Supabase. O handler exige challenge/verify token no GET,
+# HMAC da Meta no POST e ADMIN_TOKEN nos endpoints administrativos.
+verify_jwt = false
+entrypoint = "./functions/whatsapp/index.ts"
