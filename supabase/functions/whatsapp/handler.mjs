@@ -1,4 +1,5 @@
 import { Buffer } from 'node:buffer';
+import { validSignature, extractMessages } from './shared/meta.mjs';
 import { timingSafeEqual } from 'node:crypto';
 import { Readable } from 'node:stream';
 import { createHandler } from './shared/handler.mjs';
@@ -39,9 +40,39 @@ export async function handleRequest(request, env, dependencies = {}) {
     }
     raw = Buffer.concat(chunks);
   }
+  if (request.method === 'POST' && (route === '/' || route === '/webhooks/whatsapp')) {
+    const signatureValid = validSignature(raw, request.headers.get('x-hub-signature-256'), env.META_APP_SECRET);
+    const diagnostic = { event: 'webhook_received', signatureValid };
+    if (signatureValid) {
+      try {
+        const payload = JSON.parse(raw.toString());
+        const values = (payload.entry || []).flatMap(e => (e.changes || []).map(c => c.value));
+        const messages = extractMessages(payload, env.META_PHONE_NUMBER_ID);
+        Object.assign(diagnostic, {
+          incomingMessages: values.reduce((n,v) => n + (v?.messages?.length || 0), 0),
+          phoneMatches: values.some(v => v?.metadata?.phone_number_id === env.META_PHONE_NUMBER_ID),
+          textMessages: messages.length,
+          allowedMessages: messages.filter(m => allowedNumbers.includes(m.from)).length,
+          timelyMessages: messages.filter(m => Number.isFinite(m.timestamp) && Date.now()-m.timestamp <= 23*3600000 && m.timestamp <= Date.now()+300000).length
+        });
+      } catch { diagnostic.invalidJson = true; }
+    }
+    console.info(JSON.stringify(diagnostic));
+  }
+  const diagnosticFetch = async (target, options) => {
+    const provider = new URL(target).hostname === 'graph.facebook.com' ? 'meta' : 'database';
+    try {
+      const response = await fetch(target, options);
+      console.info(JSON.stringify({ event: 'provider_response', provider, status: response.status }));
+      return response;
+    } catch {
+      console.info(JSON.stringify({ event: 'provider_network_failure', provider }));
+      throw Error('Provider unavailable');
+    }
+  };
   try {
-    const store = dependencies.store || new SupabaseStore({ url: env.SUPABASE_URL, key: env.SUPABASE_SERVICE_ROLE_KEY });
-    const transport = dependencies.transport || new MetaTransport({ token: env.META_ACCESS_TOKEN, phoneId: env.META_PHONE_NUMBER_ID, version: env.META_GRAPH_VERSION });
+    const store = dependencies.store || new SupabaseStore({ url: env.SUPABASE_URL, key: env.SUPABASE_SERVICE_ROLE_KEY, fetchImpl: diagnosticFetch });
+    const transport = dependencies.transport || new MetaTransport({ token: env.META_ACCESS_TOKEN, phoneId: env.META_PHONE_NUMBER_ID, version: env.META_GRAPH_VERSION, fetchImpl: diagnosticFetch });
     const service = new MessageService({ store, transport, allowedNumbers });
     const handler = createHandler({ service, verifyToken: env.META_VERIFY_TOKEN, appSecret: env.META_APP_SECRET, phoneId: env.META_PHONE_NUMBER_ID, adminToken: env.ADMIN_TOKEN });
     const req = Readable.from(raw.length ? [raw] : []);
@@ -49,6 +80,7 @@ export async function handleRequest(request, env, dependencies = {}) {
     req.method = request.method; req.headers = Object.fromEntries(request.headers);
     let status = 200, headers = {}, body = '';
     await handler(req, { writeHead(code, values) { status = code; headers = values; }, end(value = '') { body = value; } });
+    console.info(JSON.stringify({event:'request_completed', method:request.method, status}));
     return new Response(body, { status, headers });
   } catch { return reply(503, 'Request failed'); }
 }
