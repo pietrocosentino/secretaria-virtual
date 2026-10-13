@@ -1,6 +1,11 @@
 import { Buffer } from 'node:buffer';
 import { timingSafeEqual } from 'node:crypto';
 import { validSignature, extractMessages } from './meta.mjs';
+function validPayload(payload) {
+  const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
+  if (!object(payload) || (payload.entry !== undefined && !Array.isArray(payload.entry))) return false;
+  return (payload.entry || []).every(entry => object(entry) && (entry.changes === undefined || (Array.isArray(entry.changes) && entry.changes.every(change => object(change) && object(change.value) && (change.value.messages === undefined || (Array.isArray(change.value.messages) && change.value.messages.every(object)))))));
+}
 function equalSecret(actual, expected) {
   if (!expected || typeof actual !== 'string') return false;
   const a = Buffer.from(actual), b = Buffer.from(expected);
@@ -51,6 +56,7 @@ function createHandler({ service, verifyToken, appSecret, phoneId, adminToken })
       const raw = await readBody(req);
       if (!validSignature(raw, req.headers['x-hub-signature-256'], appSecret)) return send(401);
       const payload = JSON.parse(raw.toString());
+      if (!validPayload(payload)) return send(400, 'Invalid payload');
       for (const message of extractMessages(payload, phoneId)) await service.handle(message);
       return send(200, 'EVENT_RECEIVED');
     } catch (error) {

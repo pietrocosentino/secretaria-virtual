@@ -6,7 +6,8 @@ import { createHandler } from './shared/handler.mjs';
 import { MessageService } from './shared/handle-message.mjs';
 import { MetaTransport } from './shared/meta.mjs';
 import { SupabaseStore } from './shared/store.mjs';
-import { VERSION } from './shared/conversation.mjs';
+import { VERSION, respond } from './shared/conversation.mjs';
+import { homologationHtml } from './homologacao.mjs';
 export async function handleRequest(request, env, dependencies = {}) {
   env = { ...env };
   const aliases = { META_VERIFY_TOKEN: 'WHATSAPP_VERIFY_TOKEN', META_APP_SECRET: 'WHATSAPP_APP_SECRET', META_ACCESS_TOKEN: 'WHATSAPP_ACCESS_TOKEN', META_PHONE_NUMBER_ID: 'WHATSAPP_PHONE_NUMBER_ID', META_GRAPH_VERSION: 'GRAPH_API_VERSION' };
@@ -16,6 +17,22 @@ export async function handleRequest(request, env, dependencies = {}) {
   const prefix = url.pathname.startsWith('/functions/v1/whatsapp') ? '/functions/v1/whatsapp' : '/whatsapp';
   let route = url.pathname.startsWith(prefix) ? url.pathname.slice(prefix.length) || '/' : url.pathname;
   if (route === '/webhook') route = '/webhooks/whatsapp';
+  // Homologação isolada: não instancia banco, transporte nem usa credenciais.
+  if (route === '/homologacao' && request.method === 'GET') return new Response(homologationHtml, { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Bot-Version': VERSION, 'X-Content-Type-Options': 'nosniff', 'Content-Security-Policy': "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; base-uri 'none'; frame-ancestors 'none'" } });
+  if (route === '/homologacao/simular' && request.method === 'OPTIONS') return new Response(null,{status:204,headers:{'Access-Control-Allow-Origin':'*','Access-Control-Allow-Methods':'POST, OPTIONS','Access-Control-Allow-Headers':'Content-Type'}});
+  if (route === '/homologacao/simular' && request.method === 'POST') {
+    const simReply = (status, body) => new Response(body,{status,headers:{'Content-Type':'text/plain','Cache-Control':'no-store','Access-Control-Allow-Origin':'*'}});
+    try {
+      const reader = request.body?.getReader(); let size = 0; const chunks = [];
+      if (!reader) return simReply(400, 'Invalid simulation');
+      while (true) { const {value,done}=await reader.read(); if(done)break; size+=value.length; if(size>256*1024){await reader.cancel();return simReply(413,'Simulation too large');}chunks.push(Buffer.from(value)); }
+      const body=JSON.parse(Buffer.concat(chunks).toString());
+      if (!body || typeof body.state !== 'object' || !body.state || Array.isArray(body.state) || typeof body.text !== 'string' || body.text.length>4000 || !Number.isFinite(body.now) || (body.media && (body.media.type!=='video' || typeof body.media.id!=='string'))) return simReply(400,'Invalid simulation');
+      const result=respond(body.state,body.text,{now:body.now,media:body.media});
+      return new Response(JSON.stringify({...result,version:VERSION}),{headers:{'Content-Type':'application/json','Cache-Control':'no-store','Access-Control-Allow-Origin':'*'}});
+    } catch { return simReply(400,'Invalid simulation'); }
+  }
+
   if (route === '/health' && request.method === 'GET') return reply(200, 'ok');
   if ((route === '/' || route === '/webhooks/whatsapp') && request.method === 'GET') {
     const actual = Buffer.from(url.searchParams.get('hub.verify_token') || '');

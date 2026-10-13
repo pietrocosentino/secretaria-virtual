@@ -1,0 +1,187 @@
+{
+  "generatedAt": "2026-10-13T03:30:22.076Z",
+  "source": "dist/index.html",
+  "sourceSha256": "e861e4fe1cf3a29f00dd577bf12f88efe4cfc7884053770ca5598eecf195c044",
+  "environment": "Node VM + simulated DOM; no browser or external integrations",
+  "seed": 42,
+  "stressActions": 10000,
+  "total": 29,
+  "passed": 29,
+  "failed": 0,
+  "results": [
+    {
+      "id": "M01",
+      "title": "Novo interessado tem entrada unificada de serviços",
+      "status": "passed",
+      "ms": 4
+    },
+    {
+      "id": "M02",
+      "title": "Sem identidade de cliente na interface",
+      "status": "passed",
+      "ms": 0
+    },
+    {
+      "id": "P01",
+      "title": "Inadimplente só vê pagamentos",
+      "status": "passed",
+      "ms": 1
+    },
+    {
+      "id": "P02",
+      "title": "Mensagem livre não contorna inadimplência",
+      "status": "passed",
+      "ms": 4
+    },
+    {
+      "id": "P03",
+      "title": "Regularização simulada libera acesso",
+      "status": "passed",
+      "ms": 1
+    },
+    {
+      "id": "P04",
+      "title": "Aluno em dia recebe situação da cobrança",
+      "status": "passed",
+      "ms": 2
+    },
+    {
+      "id": "C01",
+      "title": "Contratação sem botões de parentesco",
+      "status": "passed",
+      "ms": 1
+    },
+    {
+      "id": "C02",
+      "title": "Mensagem completa evita repetir dados",
+      "status": "passed",
+      "ms": 2
+    },
+    {
+      "id": "C03",
+      "title": "Preço só após entender o interesse",
+      "status": "passed",
+      "ms": 8
+    },
+    {
+      "id": "C04",
+      "title": "Nova contratação preserva plano atual",
+      "status": "passed",
+      "ms": 5
+    },
+    {
+      "id": "C05",
+      "title": "Frequência inválida é recusada",
+      "status": "passed",
+      "ms": 4
+    },
+    {
+      "id": "C06",
+      "title": "Orçamento presencial não inventa preço",
+      "status": "passed",
+      "ms": 3
+    },
+    {
+      "id": "C07",
+      "title": "Menu permite sair durante escolha da duração",
+      "status": "passed",
+      "ms": 2
+    },
+    {
+      "id": "C08",
+      "title": "Confirmação negativa permite correção",
+      "status": "passed",
+      "ms": 2
+    },
+    {
+      "id": "H01",
+      "title": "Resposta local não encerra coleta",
+      "status": "passed",
+      "ms": 5
+    },
+    {
+      "id": "H02",
+      "title": "Saúde exige confirmação antes do registro",
+      "status": "passed",
+      "ms": 24
+    },
+    {
+      "id": "H03",
+      "title": "Dor acima de 10 não avança",
+      "status": "passed",
+      "ms": 2
+    },
+    {
+      "id": "H04",
+      "title": "Comando menu sai da coleta de saúde",
+      "status": "passed",
+      "ms": 3
+    },
+    {
+      "id": "H05",
+      "title": "Descartar não gera pendência",
+      "status": "passed",
+      "ms": 1
+    },
+    {
+      "id": "H06",
+      "title": "Dor iniciada agora não recebe pergunta de evolução",
+      "status": "passed",
+      "ms": 3
+    },
+    {
+      "id": "E01",
+      "title": "Dificuldade sem dor encaminha sem referência inventada",
+      "status": "passed",
+      "ms": 3
+    },
+    {
+      "id": "E02",
+      "title": "Dor no exercício abre saúde e não gravação",
+      "status": "passed",
+      "ms": 2
+    },
+    {
+      "id": "A01",
+      "title": "Personal assume e bot fica pausado",
+      "status": "passed",
+      "ms": 1
+    },
+    {
+      "id": "A02",
+      "title": "Mensagem pessoal reinicia inatividade",
+      "status": "passed",
+      "ms": 4
+    },
+    {
+      "id": "A03",
+      "title": "15 minutos encerram sem apagar pendência",
+      "status": "passed",
+      "ms": 2
+    },
+    {
+      "id": "A04",
+      "title": "Comando textual encerrar funciona no atendimento humano",
+      "status": "passed",
+      "ms": 1
+    },
+    {
+      "id": "S01",
+      "title": "Conteúdo HTML do aluno é inserido como texto",
+      "status": "passed",
+      "ms": 1
+    },
+    {
+      "id": "R01",
+      "title": "Fluxo de contratação é alcançável pelo menu",
+      "status": "passed",
+      "ms": 1
+    },
+    {
+      "id": "ST01",
+      "title": "10000 ações aleatórias reprodutíveis, incluindo botões",
+      "status": "passed",
+      "ms": 1970
+    }
+  ]
+}

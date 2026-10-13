@@ -5,7 +5,10 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "test:prototype": "node tests/prototype.test.cjs --stress=10000 --report=docs/qa/resultado-prototipo.json",
+    "test:stress": "node scripts/qa-stress.mjs",
+    "test:regression": "npm test && npm run test:prototype"
   },
   "engines": {
     "node": ">=18"

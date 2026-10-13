@@ -1,0 +1,47 @@
+{
+  "generatedAt": "2026-10-13T03:30:14.238Z",
+  "seed": 42,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "scope": "Local/in-memory; no calls to Meta or production database. Concurrency uses a serialized test store, not live Supabase capacity."
+  },
+  "runs": [
+    {
+      "name": "Stateful deterministic engine stress",
+      "operations": 30000,
+      "elapsedMs": 1156.12,
+      "operationsPerSecond": 25948.9,
+      "p50Ms": 0.0093,
+      "p95Ms": 0.0318,
+      "p99Ms": 0.159,
+      "sessions": 200
+    },
+    {
+      "name": "Concurrent service delivery and duplicate isolation",
+      "requests": 1000,
+      "simultaneousSubmitted": 1000,
+      "contacts": 25,
+      "uniqueMessages": 500,
+      "sent": 500,
+      "rejected": 0,
+      "elapsedMs": 4363.54
+    },
+    {
+      "name": "Isolated endpoint local concurrency",
+      "concurrency": 20,
+      "operations": 1000,
+      "elapsedMs": 91.27,
+      "operationsPerSecond": 10956.16,
+      "p50Ms": 1.1718,
+      "p95Ms": 2.9937,
+      "p99Ms": 5.004
+    }
+  ],
+  "failures": [],
+  "memory": {
+    "heapUsedMiB": 36.94,
+    "rssMiB": 187.31
+  },
+  "passed": true
+}

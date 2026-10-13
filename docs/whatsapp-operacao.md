@@ -64,3 +64,9 @@ Vídeos recebidos têm o ID da mídia registrado na solicitação após confirma
 `npm test` executa fluxos reais do motor, webhook assinado com transportes de teste, autenticação administrativa, retentativa, mídia, cadastro, saúde e inatividade. Os testes do protótipo em `tests/prototype.test.cjs` são separados e verificam a demonstração do navegador.
 
 Teste no canal real: `menu` → `1` → `1` → contratação; `menu` → `5` → saúde; `menu` → `6` → exercício. As confirmações de envio dependem da Meta e de token de acesso válido.
+
+## Homologação sem Meta
+
+Acesse `/homologacao` na mesma base da função. A interface chama `/homologacao/simular` com um estado fictício por sessão e executa o mesmo `respond` do canal real. A rota não instancia transporte Meta, não acessa banco e não depende de secrets. Use somente dados fictícios; as respostas trafegam pela função hospedada, embora ela não grave a sessão.
+
+Há 14 roteiros com aprovação/reprovação e observações, três cenários, controles fictícios de pagamento/atendimento e exportação JSON das sessões. Não substitui testes de HMAC, tokens, transporte, banco, download de mídia, agendador ou integrações externas. O conteúdo HTML está em `scripts/homologacao.html`; o módulo servido é `supabase/functions/whatsapp/homologacao.mjs`.
