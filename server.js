@@ -25,11 +25,11 @@ carregarEnv();
 const { responder } = require("./bot");
 
 const PORT = process.env.PORT || 3000;
-const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN;
-const ACCESS_TOKEN = process.env.WHATSAPP_ACCESS_TOKEN;
-const PHONE_NUMBER_ID = process.env.WHATSAPP_PHONE_NUMBER_ID;
-const APP_SECRET = process.env.WHATSAPP_APP_SECRET;
-const GRAPH_VERSION = process.env.GRAPH_API_VERSION || "v25.0";
+const VERIFY_TOKEN = process.env.META_VERIFY_TOKEN?.trim() || process.env.WHATSAPP_VERIFY_TOKEN?.trim();
+const ACCESS_TOKEN = process.env.META_ACCESS_TOKEN?.trim() || process.env.WHATSAPP_ACCESS_TOKEN?.trim();
+const PHONE_NUMBER_ID = process.env.META_PHONE_NUMBER_ID?.trim() || process.env.WHATSAPP_PHONE_NUMBER_ID?.trim();
+const APP_SECRET = process.env.META_APP_SECRET?.trim() || process.env.WHATSAPP_APP_SECRET?.trim();
+const GRAPH_VERSION = process.env.META_GRAPH_VERSION || process.env.GRAPH_API_VERSION || "v25.0";
 
 for (const [nome, valor] of Object.entries({
   WHATSAPP_VERIFY_TOKEN: VERIFY_TOKEN,
@@ -40,13 +40,13 @@ for (const [nome, valor] of Object.entries({
 }
 if (!APP_SECRET) {
   console.warn(
-    "AVISO: WHATSAPP_APP_SECRET vazio. A assinatura das mensagens NÃO será validada (use só em testes)."
+    "AVISO: WHATSAPP_APP_SECRET vazio. As mensagens serão rejeitadas até configurar META_APP_SECRET ou WHATSAPP_APP_SECRET."
   );
 }
 
 // 2) Confere se a mensagem realmente veio da Meta (assinatura HMAC).
 function assinaturaValida(corpoBruto, cabecalho) {
-  if (!APP_SECRET) return true;
+  if (!APP_SECRET) return false;
   if (!cabecalho) return false;
   const esperado =
     "sha256=" +
@@ -109,7 +109,7 @@ const servidor = http.createServer((req, res) => {
   }
 
   // Verificação do webhook (a Meta chama isso ao cadastrar a URL).
-  if (req.method === "GET" && url.pathname === "/webhook") {
+  if (req.method === "GET" && ["/webhook", "/webhooks/whatsapp"].includes(url.pathname)) {
     const modo = url.searchParams.get("hub.mode");
     const token = url.searchParams.get("hub.verify_token");
     const desafio = url.searchParams.get("hub.challenge");
@@ -124,7 +124,7 @@ const servidor = http.createServer((req, res) => {
   }
 
   // Recebimento de mensagens.
-  if (req.method === "POST" && url.pathname === "/webhook") {
+  if (req.method === "POST" && ["/webhook", "/webhooks/whatsapp"].includes(url.pathname)) {
     const pedacos = [];
     req.on("data", (p) => pedacos.push(p));
     req.on("end", () => {
