@@ -1,0 +1,751 @@
+{
+  "generatedAt": "2026-10-13T12:08:13.017Z",
+  "method": "Percurso funcional deliberado no mesmo motor da API publicada; sem browser visual e sem Meta",
+  "results": [
+    {
+      "name": "Interessado e catálogo",
+      "transcript": [
+        {
+          "input": "menu",
+          "replies": [
+            "Olá! Sou a Secretária Virtual. Como posso ajudar?\n\n1 — Conhecer serviços e planos\n2 — Dúvidas e ajuda\n3 — Falar com o profissional\n4 — Meu cadastro\n0 — Minhas solicitações\n\nResponda com o número ou escreva sua pergunta. Digite “menu” para voltar."
+          ],
+          "stage": "menu"
+        },
+        {
+          "input": "1",
+          "replies": [
+            "Consultoria online — valores de referência:\nMensal: R$ 500\nTrimestral: 3 × R$ 270\nSemestral: 6 × R$ 255\nAnual: 12 × R$ 240\nAvaliação física adicional: R$ 99.\nPresencial e aula avulsa: orçamento pelo profissional.\n\n1 — Solicitar contratação\n2 — Solicitar presencial ou aula avulsa\nDigite “menu” para voltar."
+          ],
+          "stage": "services"
+        }
+      ],
+      "state": {
+        "lastActivityAt": 1791900000000,
+        "step": "services"
+      }
+    },
+    {
+      "name": "Contratação para si",
+      "transcript": [
+        {
+          "input": "menu",
+          "replies": [
+            "Olá! Sou a Secretária Virtual. Como posso ajudar?\n\n1 — Conhecer serviços e planos\n2 — Dúvidas e ajuda\n3 — Falar com o profissional\n4 — Meu cadastro\n0 — Minhas solicitações\n\nResponda com o número ou escreva sua pergunta. Digite “menu” para voltar."
+          ],
+          "stage": "menu"
+        },
+        {
+          "input": "1",
+          "replies": [
+            "Consultoria online — valores de referência:\nMensal: R$ 500\nTrimestral: 3 × R$ 270\nSemestral: 6 × R$ 255\nAnual: 12 × R$ 240\nAvaliação física adicional: R$ 99.\nPresencial e aula avulsa: orçamento pelo profissional.\n\n1 — Solicitar contratação\n2 — Solicitar presencial ou aula avulsa\nDigite “menu” para voltar."
+          ],
+          "stage": "services"
+        },
+        {
+          "input": "1",
+          "replies": [
+            "Para quem seria o acompanhamento?"
+          ],
+          "stage": "services"
+        },
+        {
+          "input": "para mim online 3 vezes por semana hipertrofia",
+          "replies": [
+            "Valores de referência. A frequência orienta o planejamento, sem mudar estes preços.\nMensal: R$ 500\nTrimestral: 3 × R$ 270\nSemestral: 6 × R$ 255\nAnual: 12 × R$ 240\nQual duração você prefere?"
+          ],
+          "stage": "services"
+        },
+        {
+          "input": "mensal",
+          "replies": [
+            "Confira o pedido:\nBeneficiário: Para mim\nRelação: Para mim\nIdade/faixa: A informar no cadastro\nObjetivo: Hipertrofia\nFrequência: 3\nModalidade: Online\nPlano: mensal\n\nO profissional define o método após avaliação individual. Seu plano atual permanece separado. Nenhuma cobrança ou reserva será criada automaticamente. Posso registrar o interesse? Responda “sim”, “corrigir” ou “cancelar”."
+          ],
+          "stage": "services"
+        },
+        {
+          "input": "sim",
+          "replies": [
+            "Qual é seu nome completo?"
+          ],
+          "stage": "registration-name"
+        },
+        {
+          "input": "Pessoa fictícia",
+          "replies": [
+            "Qual é seu e-mail? O telefone será aproveitado desta conversa."
+          ],
+          "stage": "registration-email"
+        },
+        {
+          "input": "pessoa@example.com",
+          "replies": [
+            "Pix, transferência e cartão em até 12 vezes; sem boleto. Juros e condições precisam de confirmação. Ainda não há chave Pix, link de cobrança ou dados bancários integrados. Não envie dados de cartão.\nEscolha: 1 — Pix, 2 — Transferência, 3 — Cartão."
+          ],
+          "stage": "checkout"
+        },
+        {
+          "input": "1",
+          "replies": [
+            "Solicitação registrada. Forma escolhida: Pix. O profissional precisa confirmar contratação e pagamento. A anamnese só será liberada após confirmação autorizada. Digite “menu” para continuar."
+          ],
+          "stage": "menu"
+        }
+      ],
+      "state": {
+        "lastActivityAt": 1791900000000,
+        "step": "menu",
+        "profile": {
+          "name": "Pessoa fictícia",
+          "email": "pessoa@example.com"
+        },
+        "requests": [
+          {
+            "id": "purchase-1791900000000-0",
+            "kind": "purchase",
+            "status": "pending",
+            "at": 1791900000000,
+            "source": "whatsapp",
+            "existingStudent": false,
+            "relation": "Para mim",
+            "beneficiary": "Para mim",
+            "modality": "Online",
+            "frequency": 3,
+            "goal": "Hipertrofia",
+            "plan": "mensal",
+            "customer": {
+              "name": "Pessoa fictícia",
+              "email": "pessoa@example.com"
+            },
+            "method": "Pix"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Nova contratação para beneficiário",
+      "transcript": [
+        {
+          "input": "menu",
+          "replies": [
+            "Olá! Sou a Secretária Virtual. Como posso ajudar?\n\n1 — Minhas aulas\n2 — Meu plano e treino\n3 — Pagamentos\n4 — Atualizar informações de saúde\n5 — Dificuldade em exercício\n6 — Contratar serviços\n7 — Dúvidas e ajuda\n8 — Falar com o profissional\n9 — Meu cadastro\n0 — Minhas solicitações\n\nResponda com o número ou escreva sua pergunta. Digite “menu” para voltar."
+          ],
+          "stage": "menu"
+        },
+        {
+          "input": "6",
+          "replies": [
+            "Consultoria online — valores de referência:\nMensal: R$ 500\nTrimestral: 3 × R$ 270\nSemestral: 6 × R$ 255\nAnual: 12 × R$ 240\nAvaliação física adicional: R$ 99.\nPresencial e aula avulsa: orçamento pelo profissional.\n\n1 — Solicitar contratação\n2 — Solicitar presencial ou aula avulsa\nDigite “menu” para voltar."
+          ],
+          "stage": "services"
+        },
+        {
+          "input": "1",
+          "replies": [
+            "Seu plano atual permanece separado. Para quem seria a nova contratação?"
+          ],
+          "stage": "services"
+        },
+        {
+          "input": "para minha esposa online 3 vezes por semana hipertrofia",
+          "replies": [
+            "Qual é o nome do beneficiário?"
+          ],
+          "stage": "services"
+        },
+        {
+          "input": "Ana fictícia",
+          "replies": [
+            "Qual é a idade ou faixa etária do beneficiário? Pode dizer “não sei”."
+          ],
+          "stage": "services"
+        },
+        {
+          "input": "35 anos",
+          "replies": [
+            "Valores de referência. A frequência orienta o planejamento, sem mudar estes preços.\nMensal: R$ 500\nTrimestral: 3 × R$ 270\nSemestral: 6 × R$ 255\nAnual: 12 × R$ 240\nQual duração você prefere?"
+          ],
+          "stage": "services"
+        },
+        {
+          "input": "trimestral",
+          "replies": [
+            "Confira o pedido:\nBeneficiário: Ana fictícia\nRelação: Cônjuge\nIdade/faixa: 35 anos\nObjetivo: Hipertrofia\nFrequência: 3\nModalidade: Online\nPlano: trimestral\n\nO profissional define o método após avaliação individual. Seu plano atual permanece separado. Nenhuma cobrança ou reserva será criada automaticamente. Posso registrar o interesse? Responda “sim”, “corrigir” ou “cancelar”."
+          ],
+          "stage": "services"
+        },
+        {
+          "input": "sim",
+          "replies": [
+            "Interesse registrado. Cadastro do beneficiário ou responsável e contratação serão separados do plano atual. Nenhuma cobrança foi criada. Digite “menu” para continuar."
+          ],
+          "stage": "menu"
+        }
+      ],
+      "state": {
+        "profile": {
+          "name": "Marina fictícia",
+          "email": "marina@example.com",
+          "plan": {
+            "name": "Presencial mensal",
+            "modality": "Presencial"
+          },
+          "payment": {
+            "status": "confirmed"
+          }
+        },
+        "lastActivityAt": 1791900000000,
+        "step": "menu",
+        "requests": [
+          {
+            "id": "purchase-1791900000000-0",
+            "kind": "purchase",
+            "status": "pending",
+            "at": 1791900000000,
+            "source": "whatsapp",
+            "existingStudent": true,
+            "relation": "Cônjuge",
+            "modality": "Online",
+            "frequency": 3,
+            "goal": "Hipertrofia",
+            "beneficiary": "Ana fictícia",
+            "age": "35 anos",
+            "plan": "trimestral",
+            "requester": "Marina fictícia"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Alteração do plano atual",
+      "transcript": [
+        {
+          "input": "menu",
+          "replies": [
+            "Olá! Sou a Secretária Virtual. Como posso ajudar?\n\n1 — Minhas aulas\n2 — Meu plano e treino\n3 — Pagamentos\n4 — Atualizar informações de saúde\n5 — Dificuldade em exercício\n6 — Contratar serviços\n7 — Dúvidas e ajuda\n8 — Falar com o profissional\n9 — Meu cadastro\n0 — Minhas solicitações\n\nResponda com o número ou escreva sua pergunta. Digite “menu” para voltar."
+          ],
+          "stage": "menu"
+        },
+        {
+          "input": "2",
+          "replies": [
+            "Plano confirmado: Presencial mensal\nModalidade: Presencial\nVigência: A confirmar a A confirmar\nSituação: Ativo\nAtualização de treino: A confirmar\n\n1 — Contratar outro serviço\n2 — Solicitar troca de plano\n3 — Solicitar atualização de treino\nUma nova contratação não substitui o plano atual."
+          ],
+          "stage": "plan"
+        },
+        {
+          "input": "2",
+          "replies": [
+            "Qual alteração deseja solicitar no seu plano? Informe a modalidade ou duração desejada. O profissional avaliará condições e valores; seu plano atual não será alterado automaticamente."
+          ],
+          "stage": "plan-change"
+        },
+        {
+          "input": "Quero mudar para online trimestral",
+          "replies": [
+            "Solicitação de alteração de plano registrada para avaliação do profissional. Seu plano atual permanece igual. Digite “menu” para continuar."
+          ],
+          "stage": "menu"
+        }
+      ],
+      "state": {
+        "profile": {
+          "name": "Marina fictícia",
+          "email": "marina@example.com",
+          "plan": {
+            "name": "Presencial mensal",
+            "modality": "Presencial"
+          },
+          "payment": {
+            "status": "confirmed"
+          }
+        },
+        "lastActivityAt": 1791900000000,
+        "step": "menu",
+        "requests": [
+          {
+            "id": "plan-change-1791900000000-0",
+            "kind": "plan-change",
+            "status": "pending",
+            "at": 1791900000000,
+            "source": "whatsapp",
+            "details": "Quero mudar para online trimestral",
+            "currentPlan": "Presencial mensal"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Cancelar rascunho de aula",
+      "transcript": [
+        {
+          "input": "menu",
+          "replies": [
+            "Olá! Sou a Secretária Virtual. Como posso ajudar?\n\n1 — Minhas aulas\n2 — Meu plano e treino\n3 — Pagamentos\n4 — Atualizar informações de saúde\n5 — Dificuldade em exercício\n6 — Contratar serviços\n7 — Dúvidas e ajuda\n8 — Falar com o profissional\n9 — Meu cadastro\n0 — Minhas solicitações\n\nResponda com o número ou escreva sua pergunta. Digite “menu” para voltar."
+          ],
+          "stage": "menu"
+        },
+        {
+          "input": "1",
+          "replies": [
+            "Minhas aulas:\n1 — Consultar aulas\n2 — Solicitar agendamento\n3 — Solicitar cancelamento\n4 — Solicitar remarcação\nA agenda não está integrada. O profissional confirmará as operações.\nAulas de 60 minutos, em academia e bairro combinados. Agendamento com pelo menos 12 horas; sem atendimento em feriados. Cancelamento com pelo menos 24 horas permite reposição; fora do prazo ou ausência consome a aula. Atrasos preservam o término original. Saldo, reposição e disponibilidade precisam de confirmação do profissional."
+          ],
+          "stage": "classes"
+        },
+        {
+          "input": "2",
+          "replies": [
+            "Informe data, horário, academia e bairro.\nAulas de 60 minutos, em academia e bairro combinados. Agendamento com pelo menos 12 horas; sem atendimento em feriados. Cancelamento com pelo menos 24 horas permite reposição; fora do prazo ou ausência consome a aula. Atrasos preservam o término original. Saldo, reposição e disponibilidade precisam de confirmação do profissional."
+          ],
+          "stage": "class-detail"
+        },
+        {
+          "input": "cancelar",
+          "replies": [
+            "Rascunho descartado, sem novo registro.\n\nOlá! Sou a Secretária Virtual. Como posso ajudar?\n\n1 — Minhas aulas\n2 — Meu plano e treino\n3 — Pagamentos\n4 — Atualizar informações de saúde\n5 — Dificuldade em exercício\n6 — Contratar serviços\n7 — Dúvidas e ajuda\n8 — Falar com o profissional\n9 — Meu cadastro\n0 — Minhas solicitações\n\nResponda com o número ou escreva sua pergunta. Digite “menu” para voltar."
+          ],
+          "stage": "menu"
+        }
+      ],
+      "state": {
+        "profile": {
+          "name": "Marina fictícia",
+          "email": "marina@example.com",
+          "plan": {
+            "name": "Presencial mensal",
+            "modality": "Presencial"
+          },
+          "payment": {
+            "status": "confirmed"
+          }
+        },
+        "lastActivityAt": 1791900000000,
+        "step": "menu"
+      }
+    },
+    {
+      "name": "Saúde e resumo",
+      "transcript": [
+        {
+          "input": "menu",
+          "replies": [
+            "Olá! Sou a Secretária Virtual. Como posso ajudar?\n\n1 — Minhas aulas\n2 — Meu plano e treino\n3 — Pagamentos\n4 — Atualizar informações de saúde\n5 — Dificuldade em exercício\n6 — Contratar serviços\n7 — Dúvidas e ajuda\n8 — Falar com o profissional\n9 — Meu cadastro\n0 — Minhas solicitações\n\nResponda com o número ou escreva sua pergunta. Digite “menu” para voltar."
+          ],
+          "stage": "menu"
+        },
+        {
+          "input": "4",
+          "replies": [
+            "Qual atualização deseja informar?\n1 — Lesão ou dor\n2 — Cirurgia\n3 — Medicamento ou substância\n4 — Condição de saúde\n5 — Restrição ou recomendação\n6 — Outra atualização\nDigite “cancelar” para sair."
+          ],
+          "stage": "health-kind"
+        },
+        {
+          "input": "1",
+          "replies": [
+            "Posso registrar as informações que você informar e disponibilizá-las ao profissional responsável para analisar seu atendimento. Não faço diagnóstico nem prescrevo treino ou medicamento. Concorda com esse registro? Responda “sim” ou “cancelar”."
+          ],
+          "stage": "health-consent"
+        },
+        {
+          "input": "sim",
+          "replies": [
+            "Em qual região do corpo? Informe o lado, se aplicável.\nPode responder “não sei”, digitar “encaminhar” para resumir ou “cancelar”."
+          ],
+          "stage": "health-detail"
+        },
+        {
+          "input": "ombro direito",
+          "replies": [
+            "Quando começou? Já aconteceu antes?\nPode responder “não sei”, digitar “encaminhar” para resumir ou “cancelar”."
+          ],
+          "stage": "health-detail"
+        },
+        {
+          "input": "agora",
+          "replies": [
+            "Aconteceu no treino, em casa, no trabalho ou em outra situação?\nPode responder “não sei”, digitar “encaminhar” para resumir ou “cancelar”."
+          ],
+          "stage": "health-detail"
+        },
+        {
+          "input": "supino",
+          "replies": [
+            "De 0 a 10, qual a intensidade da dor agora? Pode dizer “não sei” ou “sem dor”.\nPode responder “não sei”, digitar “encaminhar” para resumir ou “cancelar”."
+          ],
+          "stage": "health-detail"
+        },
+        {
+          "input": "5",
+          "replies": [
+            "Quais movimentos ou atividades ficaram difíceis?\nPode responder “não sei”, digitar “encaminhar” para resumir ou “cancelar”."
+          ],
+          "stage": "health-detail"
+        },
+        {
+          "input": "levantar braço",
+          "replies": [
+            "Há diagnóstico ou orientação profissional que deseja acrescentar? Pode dizer “não”.\nPode responder “não sei”, digitar “encaminhar” para resumir ou “cancelar”."
+          ],
+          "stage": "health-detail"
+        },
+        {
+          "input": "não",
+          "replies": [
+            "Confira antes de registrar:\nAssunto: Lesão ou dor\nlocal: ombro direito\ninicio: agora\ncontexto: supino\nintensidade: 5\nimpacto: levantar braço\norientacao: não\n\nConfirme com “sim”, escreva “corrigir” ou “cancelar”."
+          ],
+          "stage": "health-confirm"
+        },
+        {
+          "input": "sim",
+          "replies": [
+            "Atualização confirmada e registrada para análise do profissional. Não altere medicamentos ou treino com base neste atendimento automático. Digite “menu” para continuar."
+          ],
+          "stage": "menu"
+        }
+      ],
+      "state": {
+        "profile": {
+          "name": "Marina fictícia",
+          "email": "marina@example.com",
+          "plan": {
+            "name": "Presencial mensal",
+            "modality": "Presencial"
+          },
+          "payment": {
+            "status": "confirmed"
+          }
+        },
+        "lastActivityAt": 1791900000000,
+        "step": "menu",
+        "requests": [
+          {
+            "id": "health-1791900000000-0",
+            "kind": "health",
+            "status": "pending",
+            "at": 1791900000000,
+            "source": "whatsapp",
+            "kindLabel": "Lesão ou dor",
+            "initial": "",
+            "answers": {
+              "local": "ombro direito",
+              "inicio": "agora",
+              "contexto": "supino",
+              "intensidade": "5",
+              "impacto": "levantar braço",
+              "orientacao": "não"
+            },
+            "consentAt": 1791900000000
+          }
+        ],
+        "owner": "waiting"
+      }
+    },
+    {
+      "name": "Exercício sem vídeo",
+      "transcript": [
+        {
+          "input": "menu",
+          "replies": [
+            "Olá! Sou a Secretária Virtual. Como posso ajudar?\n\n1 — Minhas aulas\n2 — Meu plano e treino\n3 — Pagamentos\n4 — Atualizar informações de saúde\n5 — Dificuldade em exercício\n6 — Contratar serviços\n7 — Dúvidas e ajuda\n8 — Falar com o profissional\n9 — Meu cadastro\n0 — Minhas solicitações\n\nResponda com o número ou escreva sua pergunta. Digite “menu” para voltar."
+          ],
+          "stage": "menu"
+        },
+        {
+          "input": "5",
+          "replies": [
+            "Em qual exercício você está com dificuldade?"
+          ],
+          "stage": "exercise-name"
+        },
+        {
+          "input": "agachamento",
+          "replies": [
+            "Qual dificuldade você está tendo?"
+          ],
+          "stage": "exercise-difficulty"
+        },
+        {
+          "input": "dúvida de execução",
+          "replies": [
+            "Você sente dor?\n1 — Sinto dor\n2 — Dúvida de execução, sem dor"
+          ],
+          "stage": "exercise-pain"
+        },
+        {
+          "input": "2",
+          "replies": [
+            "Não há referência aprovada cadastrada.\n1 — Enviar vídeo para análise humana\n2 — Encaminhar sem vídeo\nNão repita movimentos dolorosos."
+          ],
+          "stage": "exercise-reference"
+        },
+        {
+          "input": "2",
+          "replies": [
+            "Confira: agachamento. Dificuldade: dúvida de execução.\nConfirme com “sim” ou digite “cancelar”."
+          ],
+          "stage": "exercise-confirm"
+        },
+        {
+          "input": "sim",
+          "replies": [
+            "Solicitação de análise registrada para o profissional. Não avaliei a execução nem alterei seu treino. Digite “menu” para continuar."
+          ],
+          "stage": "menu"
+        }
+      ],
+      "state": {
+        "profile": {
+          "name": "Marina fictícia",
+          "email": "marina@example.com",
+          "plan": {
+            "name": "Presencial mensal",
+            "modality": "Presencial"
+          },
+          "payment": {
+            "status": "confirmed"
+          }
+        },
+        "lastActivityAt": 1791900000000,
+        "step": "menu",
+        "requests": [
+          {
+            "id": "exercise-1791900000000-0",
+            "kind": "exercise",
+            "status": "pending",
+            "at": 1791900000000,
+            "source": "whatsapp",
+            "initial": "5",
+            "name": "agachamento",
+            "difficulty": "dúvida de execução"
+          }
+        ],
+        "owner": "waiting"
+      }
+    },
+    {
+      "name": "Anamnese liberada",
+      "transcript": [
+        {
+          "input": "anamnese",
+          "replies": [
+            "A anamnese será registrada e disponibilizada ao profissional responsável para avaliação. Concorda? Responda “sim” ou “cancelar”."
+          ],
+          "stage": "anamnese-consent"
+        },
+        {
+          "input": "sim",
+          "replies": [
+            "Qual é seu objetivo principal?"
+          ],
+          "stage": "anamnese"
+        },
+        {
+          "input": "hipertrofia",
+          "replies": [
+            "Como é sua experiência com exercícios?"
+          ],
+          "stage": "anamnese"
+        },
+        {
+          "input": "intermediária",
+          "replies": [
+            "Como é sua rotina e disponibilidade para treinar?"
+          ],
+          "stage": "anamnese"
+        },
+        {
+          "input": "3 vezes por semana",
+          "replies": [
+            "Quais condições de saúde, lesões, medicamentos ou restrições deseja informar? Pode responder “não informado”."
+          ],
+          "stage": "anamnese"
+        },
+        {
+          "input": "nenhuma atualização",
+          "replies": [
+            "Confira sua anamnese:\nobjetivo: hipertrofia\nexperiencia: intermediária\nrotina: 3 vezes por semana\nsaude: nenhuma atualização\nConfirme com “sim” ou escreva “corrigir”."
+          ],
+          "stage": "anamnese-confirm"
+        },
+        {
+          "input": "sim",
+          "replies": [
+            "Anamnese registrada para análise do profissional. O treino será preparado após avaliação; prazo a confirmar por ele. Digite “menu” para continuar."
+          ],
+          "stage": "menu"
+        }
+      ],
+      "state": {
+        "profile": {
+          "name": "Marina fictícia",
+          "email": "marina@example.com",
+          "plan": {
+            "name": "Presencial mensal",
+            "modality": "Presencial"
+          },
+          "payment": {
+            "status": "confirmed"
+          },
+          "anamnese": "submitted"
+        },
+        "lastActivityAt": 1791900000000,
+        "step": "menu",
+        "requests": [
+          {
+            "id": "anamnese-1791900000000-0",
+            "kind": "anamnese",
+            "status": "pending",
+            "at": 1791900000000,
+            "source": "whatsapp",
+            "answers": {
+              "objetivo": "hipertrofia",
+              "experiencia": "intermediária",
+              "rotina": "3 vezes por semana",
+              "saude": "nenhuma atualização"
+            },
+            "consentAt": 1791900000000
+          }
+        ]
+      }
+    },
+    {
+      "name": "Pausa e encerramento humano",
+      "transcript": [
+        {
+          "input": "oi",
+          "replies": []
+        },
+        {
+          "input": "encerrar",
+          "replies": [
+            "Atendimento humano encerrado. Pendências preservadas.\n\nOlá! Sou a Secretária Virtual. Como posso ajudar?\n\n1 — Minhas aulas\n2 — Meu plano e treino\n3 — Pagamentos\n4 — Atualizar informações de saúde\n5 — Dificuldade em exercício\n6 — Contratar serviços\n7 — Dúvidas e ajuda\n8 — Falar com o profissional\n9 — Meu cadastro\n0 — Minhas solicitações\n\nResponda com o número ou escreva sua pergunta. Digite “menu” para voltar."
+          ],
+          "stage": "menu"
+        }
+      ],
+      "state": {
+        "profile": {
+          "name": "Marina fictícia",
+          "email": "marina@example.com",
+          "plan": {
+            "name": "Presencial mensal",
+            "modality": "Presencial"
+          },
+          "payment": {
+            "status": "confirmed"
+          }
+        },
+        "owner": "bot",
+        "lastActivityAt": 1791900000000,
+        "warned": false,
+        "step": "menu"
+      }
+    },
+    {
+      "name": "Suspensão financeira",
+      "transcript": [
+        {
+          "input": "menu",
+          "replies": [
+            "Situação confirmada pelo profissional: pagamento pendente.\nPix, transferência e cartão em até 12 vezes; sem boleto. Juros e condições precisam de confirmação. Ainda não há chave Pix, link de cobrança ou dados bancários integrados. Não envie dados de cartão.\n\n1 — Pix\n2 — Transferência\n3 — Cartão\n4 — Ajuda com pagamento"
+          ],
+          "stage": "payment"
+        },
+        {
+          "input": "quero agendar",
+          "replies": [
+            "Situação confirmada pelo profissional: pagamento pendente.\nPix, transferência e cartão em até 12 vezes; sem boleto. Juros e condições precisam de confirmação. Ainda não há chave Pix, link de cobrança ou dados bancários integrados. Não envie dados de cartão.\n\n1 — Pix\n2 — Transferência\n3 — Cartão\n4 — Ajuda com pagamento"
+          ],
+          "stage": "payment"
+        },
+        {
+          "input": "encerrar",
+          "replies": [
+            "Atendimento humano encerrado. Pendências preservadas.\n\nSituação confirmada pelo profissional: pagamento pendente.\nPix, transferência e cartão em até 12 vezes; sem boleto. Juros e condições precisam de confirmação. Ainda não há chave Pix, link de cobrança ou dados bancários integrados. Não envie dados de cartão.\n\n1 — Pix\n2 — Transferência\n3 — Cartão\n4 — Ajuda com pagamento"
+          ],
+          "stage": "payment"
+        }
+      ],
+      "state": {
+        "profile": {
+          "plan": {
+            "name": "Presencial mensal",
+            "suspended": true
+          },
+          "payment": {
+            "status": "pending"
+          }
+        },
+        "lastActivityAt": 1791900000000,
+        "step": "payment",
+        "owner": "bot",
+        "warned": false
+      }
+    },
+    {
+      "name": "Retomada enquanto aguarda profissional",
+      "transcript": [
+        {
+          "input": "menu",
+          "replies": [
+            "Olá! Sou a Secretária Virtual. Como posso ajudar?\n\n1 — Conhecer serviços e planos\n2 — Dúvidas e ajuda\n3 — Falar com o profissional\n4 — Meu cadastro\n0 — Minhas solicitações\n\nResponda com o número ou escreva sua pergunta. Digite “menu” para voltar."
+          ],
+          "stage": "menu"
+        },
+        {
+          "input": "3",
+          "replies": [
+            "Solicitação registrada para o profissional. Ele ainda não assumiu a conversa. Digite “menu” para consultar outros assuntos."
+          ],
+          "stage": "menu"
+        },
+        {
+          "input": "menu",
+          "replies": [
+            "Olá! Sou a Secretária Virtual. Como posso ajudar?\n\n1 — Conhecer serviços e planos\n2 — Dúvidas e ajuda\n3 — Falar com o profissional\n4 — Meu cadastro\n0 — Minhas solicitações\n\nResponda com o número ou escreva sua pergunta. Digite “menu” para voltar."
+          ],
+          "stage": "menu"
+        }
+      ],
+      "state": {
+        "lastActivityAt": 1791900000000,
+        "step": "menu",
+        "requests": [
+          {
+            "id": "human-1791900000000-0",
+            "kind": "human",
+            "status": "pending",
+            "at": 1791900000000,
+            "source": "whatsapp",
+            "reason": "Solicitação de atendimento humano"
+          }
+        ],
+        "owner": "bot"
+      }
+    },
+    {
+      "name": "Dúvida desconhecida",
+      "transcript": [
+        {
+          "input": "Qual será o tempo amanhã?",
+          "replies": [
+            "Não tenho uma resposta cadastrada. Posso encaminhar ao profissional pelo menu.\n\nOlá! Sou a Secretária Virtual. Como posso ajudar?\n\n1 — Conhecer serviços e planos\n2 — Dúvidas e ajuda\n3 — Falar com o profissional\n4 — Meu cadastro\n0 — Minhas solicitações\n\nResponda com o número ou escreva sua pergunta. Digite “menu” para voltar."
+          ],
+          "stage": "menu"
+        },
+        {
+          "input": "menu",
+          "replies": [
+            "Olá! Sou a Secretária Virtual. Como posso ajudar?\n\n1 — Conhecer serviços e planos\n2 — Dúvidas e ajuda\n3 — Falar com o profissional\n4 — Meu cadastro\n0 — Minhas solicitações\n\nResponda com o número ou escreva sua pergunta. Digite “menu” para voltar."
+          ],
+          "stage": "menu"
+        }
+      ],
+      "state": {
+        "lastActivityAt": 1791900000000,
+        "step": "menu"
+      }
+    }
+  ]
+}
