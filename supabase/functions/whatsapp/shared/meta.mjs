@@ -30,7 +30,13 @@ class MetaTransport {
       body: JSON.stringify({ messaging_product: 'whatsapp', to, type: 'text', text: { body: text } }),
       signal: AbortSignal.timeout(10000)
     });
-    if (!response.ok) throw Error(`Meta send failed (${response.status})`);
+    if (!response.ok) {
+      let detail = {};
+      try { detail = (await response.json()).error || {}; } catch {}
+      // Apenas códigos; não registrar mensagem do provedor, token ou destinatário.
+      console.info(JSON.stringify({ event: 'meta_send_rejected', status: response.status, code: Number.isFinite(detail.code) ? detail.code : null, subcode: Number.isFinite(detail.error_subcode) ? detail.error_subcode : null }));
+      throw Error(`Meta send failed (${response.status})`);
+    }
     const result = await response.json();
     if (!result.messages?.[0]?.id) throw Error('Meta response missing message id');
     return result.messages[0].id;
