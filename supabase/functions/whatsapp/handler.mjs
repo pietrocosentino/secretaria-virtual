@@ -6,11 +6,12 @@ import { createHandler } from './shared/handler.mjs';
 import { MessageService } from './shared/handle-message.mjs';
 import { MetaTransport } from './shared/meta.mjs';
 import { SupabaseStore } from './shared/store.mjs';
+import { VERSION } from './shared/conversation.mjs';
 export async function handleRequest(request, env, dependencies = {}) {
   env = { ...env };
   const aliases = { META_VERIFY_TOKEN: 'WHATSAPP_VERIFY_TOKEN', META_APP_SECRET: 'WHATSAPP_APP_SECRET', META_ACCESS_TOKEN: 'WHATSAPP_ACCESS_TOKEN', META_PHONE_NUMBER_ID: 'WHATSAPP_PHONE_NUMBER_ID', META_GRAPH_VERSION: 'GRAPH_API_VERSION' };
   for (const [name, alias] of Object.entries(aliases)) env[name] = env[name]?.trim() || env[alias]?.trim();
-  const reply = (status, body) => new Response(body, { status, headers: { 'Cache-Control': 'no-store' } });
+  const reply = (status, body) => new Response(body, { status, headers: { 'Cache-Control': 'no-store', 'X-Bot-Version': VERSION } });
   const url = new URL(request.url);
   const prefix = url.pathname.startsWith('/functions/v1/whatsapp') ? '/functions/v1/whatsapp' : '/whatsapp';
   let route = url.pathname.startsWith(prefix) ? url.pathname.slice(prefix.length) || '/' : url.pathname;
@@ -55,7 +56,8 @@ export async function handleRequest(request, env, dependencies = {}) {
         Object.assign(diagnostic, {
           incomingMessages: values.reduce((n,v) => n + (v?.messages?.length || 0), 0),
           phoneMatches: values.some(v => v?.metadata?.phone_number_id === env.META_PHONE_NUMBER_ID),
-          textMessages: messages.length,
+          textMessages: messages.filter(m => !m.media).length,
+          mediaMessages: messages.filter(m => m.media).length,
           allowedMessages: messages.filter(m => allowedNumbers.includes(m.from)).length,
           timelyMessages: messages.filter(m => Number.isFinite(m.timestamp) && Date.now()-m.timestamp <= 23*3600000 && m.timestamp <= Date.now()+300000).length
         });
@@ -85,7 +87,7 @@ export async function handleRequest(request, env, dependencies = {}) {
     let status = 200, headers = {}, body = '';
     await handler(req, { writeHead(code, values) { status = code; headers = values; }, end(value = '') { body = value; } });
     console.info(JSON.stringify({event:'request_completed', method:request.method, status}));
-    return new Response(body, { status, headers });
+    return new Response(body, { status, headers: { ...headers, 'X-Bot-Version': VERSION } });
   } catch { return reply(503, 'Request failed'); }
 }
 

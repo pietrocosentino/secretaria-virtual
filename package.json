@@ -4,7 +4,8 @@
   "description": "Secretária virtual para WhatsApp (webhook da Meta)",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "node --test tests/*.test.mjs"
   },
   "engines": {
     "node": ">=18"

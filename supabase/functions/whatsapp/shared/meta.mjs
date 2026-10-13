@@ -1,4 +1,3 @@
-// Gerado por npm run build:edge; edite src.
 import { Buffer } from 'node:buffer';
 import * as crypto from 'node:crypto';
 function validSignature(raw, signature, secret) {
@@ -11,8 +10,13 @@ function extractMessages(payload, phoneId) {
   return (payload.entry || []).flatMap(entry => (entry.changes || []).flatMap(change => {
     const value = change.value;
     if (change.field !== 'messages' || value?.metadata?.phone_number_id !== phoneId) return [];
-    return (value.messages || []).filter(m => m.type === 'text' && typeof m.text?.body === 'string' && /^\d{7,15}$/.test(m.from) && typeof m.id === 'string' && m.id.length < 256)
-      .map(m => ({ id: m.id, from: m.from, text: m.text.body, timestamp: Number(m.timestamp) * 1000 }));
+    return (value.messages || []).filter(m => /^\d{7,15}$/.test(m.from) && typeof m.id === 'string' && m.id.length < 256)
+      .map(m => {
+        const text = m.type === 'text' ? m.text?.body : m.type === 'interactive' ? (m.interactive?.button_reply?.title || m.interactive?.list_reply?.title) : m.type === 'button' ? m.button?.text : '';
+        const asset = m[m.type];
+        const media = m.type === 'video' && typeof asset?.id === 'string' ? { type: 'video', id: asset.id, mimeType: asset.mime_type } : m.type !== 'text' && m.type !== 'interactive' && m.type !== 'button' ? {type: m.type} : undefined;
+        return { id: m.id, from: m.from, text: typeof text === 'string' ? text : '', media, timestamp: Number(m.timestamp) * 1000 };
+      });
   }));
 }
 class MetaTransport {

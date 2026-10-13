@@ -14,7 +14,7 @@ O piloto é uma secretária virtual para o profissional de demonstração, com a
 - Pendências preservadas após o encerramento.
 - Cenários de interessado, aluno ativo e aluno com pagamento pendente.
 
-As respostas usam fluxos e palavras-chave. Não há agente de IA, backend, persistência de dados nem integrações reais com WhatsApp, calendário, pagamentos ou aplicativos. Atualizar a página reinicia a demonstração. O tempo avança pelo botão de simulação.
+Na demonstração do navegador, as respostas usam fluxos e palavras-chave, sem integrações reais. O backend do WhatsApp é separado e está descrito abaixo. Atualizar a página reinicia a demonstração. O tempo avança pelo botão de simulação.
 
 ## Executar
 
@@ -46,3 +46,11 @@ O acesso à demonstração é privado e depende da autorização do proprietári
 ## Condições comerciais
 
 Os preços são referências do material fornecido pelo personal. Condições finais e juros devem ser validados antes da operação comercial. Dados de alunos no protótipo são fictícios.
+
+## Atendimento real no WhatsApp
+
+O webhook usa Meta Cloud API e Supabase para persistir contexto, cadastro e solicitações. O menu oferece serviços, aulas, plano/treino, pagamentos, saúde, dificuldade em exercícios, dúvidas, atendimento humano e cadastro. A contratação organiza o beneficiário separadamente e preserva o plano vigente. Saúde e anamnese são coletadas por etapas com confirmação; vídeos ficam associados a solicitações para análise humana.
+
+O bot utiliza regras determinísticas, sem agente de IA. Agenda, cobrança, MFIT, download permanente de vídeos e painel administrativo web ainda não estão integrados. A API administrativa autenticada permite assumir/encerrar, responder, confirmar pagamentos e resolver pendências. Os avisos automáticos por inatividade exigem configurar um agendador para `admin/tick`.
+
+Para executar o backend, configure as variáveis descritas em [Operação do WhatsApp](docs/whatsapp-operacao.md) e use `npm start`. Testes do backend: `npm test`.

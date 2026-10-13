@@ -1,31 +1,71 @@
-// Gerado por npm run build:edge; edite src.
-import { normalize, startPurchase, readPurchase } from './purchase.mjs';
-const menu = 'Olá! Sou a Secretária. Posso ajudar com serviços e planos ou encaminhar sua solicitação ao profissional. O que você procura?';
-function respond(previous = {}, text) {
-  const state = structuredClone(previous), n = normalize(text);
-  if (!n) return { state, replies: [] };
-  if (state.owner === 'human' || state.owner === 'waiting') return { state, replies: [] };
-  if (state.purchase) {
-    const result = readPurchase(state.purchase, text);
-    if (result.cancelled) delete state.purchase;
-    else if (result.confirmed) {
-      state.requests = [...(state.requests || []), { kind: 'purchase', ...result.draft }];
-      delete state.purchase;
-      state.owner = 'waiting';
-    } else state.purchase = { draft: result.draft, step: result.step };
-    return { state, replies: [result.reply] };
-  }
-  if (/^(oi|ola|menu|voltar)$/.test(n)) return { state, replies: [menu] };
-  if (/contrat|consultoria|plano|servico|treinar/.test(n)) {
-    const start = startPurchase();
-    const result = /(?:para|pra)\s+(?:mim|minha|meu|meus)/.test(n) ? readPurchase(start, text) : start;
-    state.purchase = { draft: result.draft, step: result.step };
-    return { state, replies: [result.reply] };
-  }
-  // Não armazenar relatos médicos no piloto do canal real.
-  state.owner = 'waiting';
-  state.requests = [...(state.requests || []), { kind: 'human' }];
-  return { state, replies: ['Sua solicitação aguarda atendimento do profissional. Agendamentos, pagamentos e orientações de saúde precisam ser confirmados por ele.'] };
+import { normalize, startPurchase, readPurchase, planPrices } from './purchase.mjs';
+import { healthStart, healthRead, healthKinds, detectHealth } from './health.mjs';
+export const VERSION = 'jornadas-1';
+const menu = 'Olá! Sou a Secretária Virtual. Como posso ajudar?\n\n1 — Serviços e planos\n2 — Minhas aulas\n3 — Meu plano e treino\n4 — Pagamentos\n5 — Atualizar informações de saúde\n6 — Dificuldade em exercício\n7 — Dúvidas e regras\n8 — Falar com o profissional\n9 — Meu cadastro\n0 — Minhas solicitações\n\nResponda com o número ou escreva sua pergunta. Digite “menu” para voltar.';
+const rules = 'Aulas de 60 minutos, em academia e bairro combinados. Agendamento com pelo menos 12 horas; sem atendimento em feriados. Cancelamento com pelo menos 24 horas permite reposição; fora do prazo ou ausência consome a aula. Atrasos preservam o término original. Saldo, reposição e disponibilidade precisam de confirmação do profissional.';
+const payments = 'Pix, transferência e cartão em até 12 vezes; sem boleto. Juros e condições precisam de confirmação. Ainda não há chave Pix, link de cobrança ou dados bancários integrados. Não envie dados de cartão.';
+const yes = n => /^(sim|confirmo|confirmar|confirmar e encaminhar|pode seguir|ok|certo)[.!]*$/.test(n);
+const correction = n => /^(nao|corrigir|alterar|corrigir respostas)[.!]*$/.test(n);
+function clearDraft(s) { for(const key of ['purchase','healthDraft','exercise','draft','awaiting'])delete s[key]; }
+function showMenu(s) { clearDraft(s);s.step='menu';return menu; }
+function task(s,kind,details,now) { const item={id:`${kind}-${now}-${(s.requests||[]).length}`,kind,status:'pending',at:now,source:'whatsapp',...details};s.requests=[...(s.requests||[]),item];return item; }
+function handoff(s,reason,now) {task(s,'human',{reason},now);s.owner='waiting';s.step='menu';return 'Solicitação registrada para o profissional. Ele ainda não assumiu a conversa. Digite “menu” para consultar outros assuntos.';}
+function paymentInfo(s) {const p=s.profile?.payment;return (p?`Situação confirmada pelo profissional: ${p.status==='confirmed'?'pagamento confirmado':'pagamento pendente'}.\n`:'Não há situação de pagamento confirmada no cadastro.\n')+payments+'\n\n1 — Pix\n2 — Transferência\n3 — Cartão\n4 — Ajuda com pagamento';}
+function profileInfo(s) {const p=s.profile||{};return `Nome: ${p.name||'Não informado'}\nE-mail: ${p.email||'Não informado'}\nTelefone aproveitado desta conversa.\n1 — Alterar cadastro\nDigite “menu” para voltar.`;}
+function planInfo(s) {const p=s.profile?.plan;return (p?`Plano confirmado: ${p.name}\nModalidade: ${p.modality||'A confirmar'}\nVigência: ${p.start||'A confirmar'} a ${p.end||'A confirmar'}\nSituação: ${p.suspended?'Suspenso por pendência financeira':'Ativo'}\nAtualização de treino: ${p.nextTraining||'A confirmar'}`:'Não há plano confirmado no cadastro.')+'\n\n1 — Contratar outro serviço\n2 — Solicitar troca de plano\n3 — Solicitar atualização de treino\nUma nova contratação não substitui o plano atual.';}
+function healthMenu(s) {s.step='health-kind';return 'Qual atualização deseja informar?\n'+healthKinds.map((k,i)=>`${i+1} — ${k}`).join('\n')+'\nDigite “cancelar” para sair.';}
+function startHealth(s,kind,initial='') {s.healthDraft=healthStart(kind,initial);s.step='health-consent';return 'Posso registrar as informações que você informar e disponibilizá-las ao profissional responsável para analisar seu atendimento. Não faço diagnóstico nem prescrevo treino ou medicamento. Concorda com esse registro? Responda “sim” ou “cancelar”.';}
+function questions(s) {return [['objetivo','Qual é seu objetivo principal?'],['experiencia','Como é sua experiência com exercícios?'],['rotina','Como é sua rotina e disponibilidade para treinar?'],['saude',(s.requests||[]).some(r=>r.kind==='health')?'Já há atualizações de saúde registradas. Há algo novo a acrescentar? Pode responder “não”.':'Quais condições de saúde, lesões, medicamentos ou restrições deseja informar? Pode responder “não informado”.']];}
+export function respond(previous={},text='',{now=Date.now(),media}={}) {
+ const s=structuredClone(previous),n=normalize(text).replace(/[!?]+$/,'').trim();const out=message=>({state:s,replies:message?[message]:[]});
+ if(/^(encerrar|encerrar atendimento|retomar bot|voltar ao bot)$/.test(n)){s.owner='bot';s.lastActivityAt=now;s.warned=false;return out('Atendimento humano encerrado. Pendências preservadas.\n\n'+showMenu(s));}
+ if(s.owner==='human'){if(Number.isFinite(s.lastActivityAt)&&now-s.lastActivityAt>=15*60000){s.owner='bot';s.warned=false;}else{s.lastActivityAt=now;s.warned=false;return out();}}
+ s.lastActivityAt=now;
+ if(s.profile?.plan?.suspended && s.owner!=='human'){
+  if(s.step==='payment' && (/^[1-4]$/.test(n)||/pix|transfer|cartao/.test(n))){const method=({'1':'Pix','2':'Transferência','3':'Cartão','4':'Ajuda com pagamento'})[n]||text;task(s,'payment-help',{method},now);return out(`Orientação sobre ${method} solicitada ao profissional. ${payments}`);}
+  clearDraft(s);s.step='payment';return out(paymentInfo(s));
+ }
+ if(media){if(media.type==='video'&&s.step==='exercise-video'){s.exercise.media={id:media.id,mimeType:media.mimeType,source:'whatsapp'};s.step='exercise-confirm';return out(`Vídeo recebido para análise humana.\nExercício: ${s.exercise.name}\nDificuldade: ${s.exercise.difficulty}\nConfirme com “sim” ou digite “cancelar”. Não analisei o vídeo automaticamente.`);}return out('Recebi uma mídia. Escreva sua solicitação ou digite “menu”. Para vídeo, escolha primeiro “Dificuldade em exercício”.');}
+ if(!n)return out();
+ if(/^(menu|voltar|oi|ola)$/.test(n)){if(s.owner==='waiting')s.owner='bot';return out(showMenu(s));}
+ if(/^(cancelar|descartar|descartar atualizacao)$/.test(n)&&!['classes','class-detail'].includes(s.step))return out('Rascunho descartado, sem novo registro.\n\n'+showMenu(s));
+ if(s.owner==='waiting')s.owner='bot';
+ if(s.step==='health-kind'){const k=healthKinds[Number(n)-1]||healthKinds.find(k=>normalize(k)===n);return out(k?startHealth(s,k):healthMenu(s));}
+ if(s.step==='health-consent'){if(!yes(n))return out('Confirme com “sim” ou digite “cancelar”.');s.healthDraft.consentAt=now;s.step='health-detail';return out(healthRead(s.healthDraft).reply);}
+ if(['health-detail','health-confirm'].includes(s.step)){const r=healthRead(s.healthDraft,text);if(r.confirmed){task(s,'health',{kindLabel:r.draft.kind,initial:r.draft.initial,answers:r.draft.answers,consentAt:r.draft.consentAt},now);delete s.healthDraft;delete s.exercise;s.step='menu';s.owner='waiting';return out('Atualização confirmada e registrada para análise do profissional. Não altere medicamentos ou treino com base neste atendimento automático. Digite “menu” para continuar.');}s.healthDraft=r.draft;s.step=r.draft.confirm?'health-confirm':'health-detail';return out(r.reply);}
+ if(s.purchase){const r=readPurchase(s.purchase,text,s.profile||{});if(r.confirmed){s.draft=r.draft;delete s.purchase;if(r.draft.relation==='Para mim'&&!s.profile?.plan){if(!s.profile?.name){s.step='registration-name';return out('Qual é seu nome completo?');}if(!s.profile?.email){s.step='registration-email';return out('Qual é seu e-mail?');}s.step='checkout';return out('Cadastro aproveitado.\n'+payments+'\nEscolha: 1 — Pix, 2 — Transferência, 3 — Cartão.');}task(s,'purchase',{...r.draft,requester:s.profile?.name},now);delete s.draft;s.step='menu';return out('Interesse registrado. Cadastro do beneficiário ou responsável e contratação serão separados do plano atual. Nenhuma cobrança foi criada. Digite “menu” para continuar.');}s.purchase={draft:r.draft,step:r.step};return out(r.reply);}
+ if(['registration-name','profile-name'].includes(s.step)){if(text.trim().length<2)return out('Informe seu nome completo.');s.profile||={};s.profile.name=text.trim();s.step=s.step==='profile-name'?'profile-email':s.profile.email?'checkout':'registration-email';return out(s.step==='checkout'?payments+'\nEscolha: 1 — Pix, 2 — Transferência, 3 — Cartão.':'Qual é seu e-mail? O telefone será aproveitado desta conversa.');}
+ if(['registration-email','profile-email'].includes(s.step)){if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text.trim()))return out('Confira o e-mail. Exemplo: nome@email.com');s.profile||={};s.profile.email=text.trim();if(s.step==='profile-email'){s.step='profile';return out('Cadastro atualizado.\n'+profileInfo(s));}s.step='checkout';return out(payments+'\nEscolha: 1 — Pix, 2 — Transferência, 3 — Cartão.');}
+ if(s.step==='checkout'){const method=({'1':'Pix','2':'Transferência','3':'Cartão'})[n]||(/pix/.test(n)?'Pix':/transfer/.test(n)?'Transferência':/cartao/.test(n)?'Cartão':null);if(!method)return out('Escolha: 1 — Pix, 2 — Transferência, 3 — Cartão.');task(s,'purchase',{...s.draft,customer:{...s.profile},method},now);delete s.draft;s.step='menu';return out(`Solicitação registrada. Forma escolhida: ${method}. O profissional precisa confirmar contratação e pagamento. A anamnese só será liberada após confirmação autorizada. Digite “menu” para continuar.`);}
+ if(s.step==='anamnese-consent'){if(!yes(n))return out('Responda “sim” para registrar a anamnese ou “cancelar”.');s.draft={answers:{},index:0,consentAt:now};s.step='anamnese';return out(questions(s)[0][1]);}
+ if(s.step==='anamnese'){const q=questions(s),d=s.draft;d.answers[q[d.index][0]]=text.trim();d.index++;if(d.index<q.length)return out(q[d.index][1]);s.step='anamnese-confirm';return out('Confira sua anamnese:\n'+Object.entries(d.answers).map(([k,v])=>`${k}: ${v}`).join('\n')+'\nConfirme com “sim” ou escreva “corrigir”.');}
+ if(s.step==='anamnese-confirm'){if(correction(n)){s.draft.answers={};s.draft.index=0;s.step='anamnese';return out(questions(s)[0][1]);}if(!yes(n))return out('Confirme com “sim” ou escreva “corrigir”.');task(s,'anamnese',{answers:s.draft.answers,consentAt:s.draft.consentAt},now);delete s.draft;s.step='menu';s.profile.anamnese='submitted';return out('Anamnese registrada para análise do profissional. O treino será preparado após avaliação; prazo a confirmar por ele. Digite “menu” para continuar.');}
+ if(s.step==='exercise-name'){s.exercise.name=text.trim();s.step='exercise-difficulty';return out('Qual dificuldade você está tendo?');}
+ if(s.step==='exercise-difficulty'){s.exercise.difficulty=text.trim();s.step='exercise-pain';return out('Você sente dor?\n1 — Sinto dor\n2 — Dúvida de execução, sem dor');}
+ if(s.step==='exercise-pain'){if(n==='1'||(!/sem dor|nao/.test(n)&&/dor|sim/.test(n)))return out(startHealth(s,'Lesão ou dor',`Exercício: ${s.exercise.name}. Dificuldade: ${s.exercise.difficulty}`));if(n==='2'||/sem dor|nao/.test(n)){s.step='exercise-reference';return out('Não há referência aprovada cadastrada.\n1 — Enviar vídeo para análise humana\n2 — Encaminhar sem vídeo\nNão repita movimentos dolorosos.');}return out('Responda 1 — Dor ou 2 — Sem dor.');}
+ if(s.step==='exercise-reference'){if(n==='1'||/video/.test(n)&&!/sem video/.test(n)){s.step='exercise-video';return out('Envie um vídeo já gravado pelo WhatsApp, sem repetir movimentos dolorosos. O profissional fará a análise. Digite “sem vídeo” para encaminhar apenas a descrição.');}if(n==='2'||/sem video|encaminhar/.test(n)){s.step='exercise-confirm';return out(`Confira: ${s.exercise.name}. Dificuldade: ${s.exercise.difficulty}.\nConfirme com “sim” ou digite “cancelar”.`);}return out('Escolha 1 — Vídeo ou 2 — Sem vídeo.');}
+ if(s.step==='exercise-video'){if(/sem video/.test(n)){s.step='exercise-confirm';return out('Encaminhar sem vídeo? Responda “sim” ou “cancelar”.');}return out('Envie o vídeo ou escreva “sem vídeo”.');}
+ if(s.step==='exercise-confirm'){if(!yes(n))return out('Confirme com “sim” ou digite “cancelar”.');task(s,'exercise',{...s.exercise},now);delete s.exercise;s.step='menu';s.owner='waiting';return out('Solicitação de análise registrada para o profissional. Não avaliei a execução nem alterei seu treino. Digite “menu” para continuar.');}
+ if(['class-detail','location'].includes(s.step)){task(s,'class',{action:s.awaiting||'Presencial',details:text.trim()},now);delete s.awaiting;s.step='menu';return out('Solicitação registrada para conferir disponibilidade, modalidade e regras. Nenhuma reserva ou alteração foi confirmada. Digite “menu” para continuar.');}
+ if(n==='anamnese'||/responder.*anamnese/.test(n)){if(s.profile?.payment?.status!=='confirmed')return out('A anamnese será liberada após confirmação do pagamento pelo profissional. Digite “pagamentos” para orientação.');s.step='anamnese-consent';return out('A anamnese será registrada e disponibilizada ao profissional responsável para avaliação. Concorda? Responda “sim” ou “cancelar”.');}
+ if(s.step==='profile'&&(n==='1'||/alterar/.test(n))){s.step='profile-name';return out('Qual é seu nome completo?');}
+ if(s.step==='plan'&&/^[1-3]$/.test(n)){if(n==='3')return out(handoff(s,'Solicitar atualização de treino',now));s.purchase=startPurchase(s.profile);return out(s.purchase.reply);}
+ if(s.step==='classes'&&/^[1-4]$/.test(n)){if(s.profile?.plan?.suspended){s.step='payment';return out(paymentInfo(s));}s.awaiting=({'1':'Consulta de aulas','2':'Agendamento','3':'Cancelamento','4':'Remarcação'})[n];s.step='class-detail';return out('Informe data, horário, academia e bairro.\n'+rules);}
+ if(s.step==='payment'&&(/^[1-4]$/.test(n)||/pix|transfer|cartao/.test(n))){const method=({'1':'Pix','2':'Transferência','3':'Cartão','4':'Ajuda com pagamento'})[n]||text;task(s,'payment-help',{method},now);return out(`Orientação sobre ${method} solicitada ao profissional. ${payments}`);}
+ if(s.step==='faq'&&/^[1-6]$/.test(n)){if(n==='1')return out('Escolha o serviço e solicite a contratação. Após pagamento confirmado, responda à anamnese. O profissional analisa e prepara seu treino. A autorização de imagem é independente da contratação.');if(n==='2'){s.step='payment';return out(paymentInfo(s));}if(n==='3')return out('Treinos normalmente atualizados a cada 45 dias. Primeiro treino após pagamento e anamnese completos; prazo a confirmar pelo profissional.');if(n==='4')return out(rules);if(n==='5')return out('Planos têm início e fim. Atraso no pagamento suspende o plano sem prorrogar a vigência. Pausa, renovação e exceções precisam de confirmação pelo profissional.');return out(handoff(s,'Dúvida solicitada pelo cliente',now));}
+ if(s.step==='services'){if(n==='1'||/contratar|consultoria/.test(n)){s.purchase=startPurchase(s.profile);return out(s.purchase.reply);}if(n==='2'||/presencial|avulsa/.test(n)){s.step='location';return out('Em qual academia e bairro gostaria de treinar? Informe a disponibilidade desejada. Valores presenciais e de aula avulsa precisam de orçamento.');}}
+ const option=s.step==='menu'||!s.step?n:'';
+ if(option==='0'||/minhas solicitacoes|pendencias/.test(n)){const p=(s.requests||[]).filter(r=>r.status!=='resolved');return out(p.length?p.map((r,i)=>`${i+1} — ${r.kind}: aguardando profissional`).join('\n'):'Não há solicitações pendentes registradas.');}
+ if(option==='1'||/servicos|preco|valor|planos|consultoria|contratar|treinar/.test(n)){s.step='services';return out('Consultoria online — valores de referência:\n'+planPrices+'\nAvaliação física adicional: R$ 99.\nPresencial e aula avulsa: orçamento pelo profissional.\n\n1 — Solicitar contratação\n2 — Solicitar presencial ou aula avulsa\nDigite “menu” para voltar.');}
+ if(option==='2'||/minhas aulas|agendar|marcar|cancelar aula|remarcar/.test(n)){if(s.profile?.plan?.suspended){s.step='payment';return out(paymentInfo(s));}s.step='classes';return out('Minhas aulas:\n1 — Consultar aulas\n2 — Solicitar agendamento\n3 — Solicitar cancelamento\n4 — Solicitar remarcação\nA agenda não está integrada. O profissional confirmará as operações.\n'+rules);}
+ if(option==='3'||/meu plano|meu treino|troca.*treino|atualiza.*treino/.test(n)){s.step='plan';return out(planInfo(s));}
+ if(option==='4'||/pagamento|pix|cartao|transferencia|paguei/.test(n)){s.step='payment';return out(paymentInfo(s));}
+ if(option==='5'||/atualizar.*saude/.test(n))return out(healthMenu(s));
+ if(option==='6'||/dificuldade|execucao|executar|nao consigo fazer/.test(n)){s.exercise={initial:text};s.step='exercise-name';return out('Em qual exercício você está com dificuldade?');}
+ const kind=detectHealth(n);if(kind)return out(startHealth(s,kind,text));
+ if(option==='7'||/duvida|ajuda|regras/.test(n)){s.step='faq';return out('Dúvidas e regras:\n1 — Como funciona\n2 — Pagamentos\n3 — Atualização dos treinos\n4 — Agendamentos e cancelamentos\n5 — Vigência e suspensão\n6 — Falar com o profissional');}
+ if(option==='8'||/falar.*profissional|falar.*personal|humano|atendente/.test(n))return out(handoff(s,text.trim(),now));
+ if(option==='9'||/cadastro|dados pessoais/.test(n)){s.step='profile';return out(profileInfo(s));}
+ if(/como funciona/.test(n))return out('Você solicita o serviço, confirma contratação e pagamento com o profissional e responde à anamnese. Ele avalia e elabora o treino. Digite “serviços” para consultar planos.');
+ s.step='menu';return out('Não tenho uma resposta cadastrada. Posso encaminhar pela opção 8.\n\n'+menu);
 }
-export { respond };
-

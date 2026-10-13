@@ -1,4 +1,3 @@
-// Gerado por npm run build:edge; edite src.
 import { Buffer } from 'node:buffer';
 import { timingSafeEqual } from 'node:crypto';
 import { validSignature, extractMessages } from './meta.mjs';
@@ -33,6 +32,15 @@ function createHandler({ service, verifyToken, appSecret, phoneId, adminToken })
         const body = JSON.parse((await readBody(req)).toString());
         if (!/^\d{7,15}$/.test(body.contact || '') || !['bot', 'human'].includes(body.owner)) return send(400);
         await service.setOwner(body.contact, body.owner); return send(200, 'ok');
+      }
+      if (url.pathname === '/admin/action' && req.method === 'POST') {
+        if (!adminToken || !equalSecret(req.headers.authorization, `Bearer ${adminToken}`)) return send(401);
+        const body = JSON.parse((await readBody(req)).toString());
+        await service.adminAction(body); return send(200, 'ok');
+      }
+      if (url.pathname === '/admin/tick' && req.method === 'POST') {
+        if (!adminToken || !equalSecret(req.headers.authorization, `Bearer ${adminToken}`)) return send(401);
+        await service.tick(); return send(200, 'ok');
       }
       if (url.pathname !== '/webhooks/whatsapp') return send(404);
       if (req.method === 'GET') {
